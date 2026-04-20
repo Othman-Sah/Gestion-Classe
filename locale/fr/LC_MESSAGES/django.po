@@ -1,0 +1,473 @@
+# French translations for Gestion Presences
+msgid ""
+msgstr ""
+"Project-Id-Version: Gestion Presences 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-04-17 10:00+0000\n"
+"PO-Revision-Date: 2026-04-17 10:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: French\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# Navigation
+msgid "Dashboard"
+msgstr "Tableau de Bord"
+
+msgid "Student Area"
+msgstr "Espace Étudiant"
+
+msgid "My Profile"
+msgstr "Mon Profil"
+
+msgid "Change Password"
+msgstr "Changer le Mot de Passe"
+
+msgid "Logout"
+msgstr "Déconnexion"
+
+msgid "Admin Area"
+msgstr "Espace Admin"
+
+msgid "Manage Classes"
+msgstr "Gérer les Classes"
+
+msgid "Manage Justifications"
+msgstr "Gérer les Justifications"
+
+msgid "Reports"
+msgstr "Rapports"
+
+msgid "Language"
+msgstr "Langue"
+
+# Student Dashboard
+msgid "Good morning"
+msgstr "Bonjour"
+
+msgid "Good afternoon"
+msgstr "Bon après-midi"
+
+msgid "Good evening"
+msgstr "Bonsoir"
+
+msgid "Student Portal"
+msgstr "Portail Étudiant"
+
+msgid "Class"
+msgstr "Classe"
+
+msgid "Presences"
+msgstr "Présences"
+
+msgid "Absences"
+msgstr "Absences"
+
+msgid "Pending"
+msgstr "En Attente"
+
+msgid "Your Classes Schedule"
+msgstr "Votre Emploi du Temps"
+
+msgid "Monday"
+msgstr "Lundi"
+
+msgid "Tuesday"
+msgstr "Mardi"
+
+msgid "Wednesday"
+msgstr "Mercredi"
+
+msgid "Thursday"
+msgstr "Jeudi"
+
+msgid "Friday"
+msgstr "Vendredi"
+
+msgid "From"
+msgstr "De"
+
+msgid "To"
+msgstr "À"
+
+msgid "Professor"
+msgstr "Professeur"
+
+msgid "Room"
+msgstr "Salle"
+
+msgid "Quick Absence Justification"
+msgstr "Justification d'Absence Rapide"
+
+msgid "Justify Absence"
+msgstr "Justifier une Absence"
+
+msgid "Attendance History"
+msgstr "Historique de Présence"
+
+msgid "Date"
+msgstr "Date"
+
+msgid "Status"
+msgstr "Statut"
+
+msgid "Present"
+msgstr "Présent"
+
+msgid "Absent"
+msgstr "Absent"
+
+msgid "Justified"
+msgstr "Justifiée"
+
+msgid "Approved"
+msgstr "Approuvée"
+
+msgid "Rejected"
+msgstr "Rejetée"
+
+msgid "Action"
+msgstr "Action"
+
+# Admin Dashboard
+msgid "Teacher Studio"
+msgstr "Studio Enseignant"
+
+msgid "Today"
+msgstr "Aujourd'hui"
+
+msgid "Your classroom, better organized"
+msgstr "Votre salle de classe, mieux organisée"
+
+msgid "Track your classes in real time"
+msgstr "Suivez vos classes en temps réel"
+
+msgid "Classes"
+msgstr "Classes"
+
+msgid "Students"
+msgstr "Étudiants"
+
+msgid "Calls"
+msgstr "Appels"
+
+msgid "Active groups"
+msgstr "Groupes actifs"
+
+msgid "Total registered"
+msgstr "Total inscrit"
+
+msgid "Today's"
+msgstr "D'aujourd'hui"
+
+msgid "Rate"
+msgstr "Taux"
+
+msgid "Presences"
+msgstr "Présences"
+
+msgid "Create a Class"
+msgstr "Créer une Classe"
+
+msgid "Add a new group"
+msgstr "Ajoutez un nouveau groupe"
+
+msgid "Create the class"
+msgstr "Créer la classe"
+
+msgid "Your Classes"
+msgstr "Vos Classes"
+
+msgid "Access full management"
+msgstr "Accédez à la gestion complète"
+
+msgid "Room"
+msgstr "Salle"
+
+msgid "Stu."
+msgstr "Étu."
+
+msgid "Pres."
+msgstr "Prés."
+
+msgid "Open"
+msgstr "Ouvrir"
+
+msgid "No classes yet"
+msgstr "Aucune classe pour le moment"
+
+msgid "Create your first class to start"
+msgstr "Créez votre première classe pour commencer"
+
+msgid "Quick Actions"
+msgstr "Actions Rapides"
+
+msgid "Access main functions"
+msgstr "Accédez aux fonctions principales"
+
+msgid "Refresh"
+msgstr "Rafraîchir"
+
+msgid "Justifications"
+msgstr "Justifications"
+
+msgid "Reports"
+msgstr "Rapports"
+
+msgid "Call"
+msgstr "Appel"
+
+msgid "Reports & Exports"
+msgstr "Rapports & Exports"
+
+msgid "Generate monthly documents"
+msgstr "Générez les documents mensuels"
+
+msgid "Monthly Report"
+msgstr "Rapport Mensuel"
+
+msgid "Export PDF"
+msgstr "Export PDF"
+
+msgid "Statistics"
+msgstr "Statistiques"
+
+msgid "Performance Overview"
+msgstr "Vue d'ensemble des Performances"
+
+msgid "Quick analysis of each class"
+msgstr "Analyse rapide de chaque classe"
+
+msgid "Staff"
+msgstr "Effectif"
+
+msgid "Present"
+msgstr "Présentes"
+
+msgid "Absent"
+msgstr "Absentes"
+
+msgid "Rate"
+msgstr "Taux"
+
+msgid "Detail"
+msgstr "Détail"
+
+# Justifications
+msgid "Absence Justifications"
+msgstr "Justifications d'Absence"
+
+msgid "Examine and process"
+msgstr "Examinez et traitez"
+
+msgid "Pending Justifications"
+msgstr "Justifications en Attente"
+
+msgid "To process"
+msgstr "À traiter"
+
+msgid "Approved"
+msgstr "Approuvées"
+
+msgid "Accepted"
+msgstr "Acceptées"
+
+msgid "Rejected"
+msgstr "Rejetées"
+
+msgid "Refused"
+msgstr "Refusées"
+
+msgid "Absence Date"
+msgstr "Date de l'Absence"
+
+msgid "Reason"
+msgstr "Motif"
+
+msgid "Explanation"
+msgstr "Explication"
+
+msgid "Submitted"
+msgstr "Soumis"
+
+msgid "Approve"
+msgstr "Approuver"
+
+msgid "Reject"
+msgstr "Rejeter"
+
+msgid "No Pending Justifications"
+msgstr "Aucune Justification en Attente"
+
+msgid "All justifications have been reviewed"
+msgstr "Toutes les justifications ont été examinées"
+
+msgid "Back to Dashboard"
+msgstr "Retour au Tableau de Bord"
+
+# Forms
+msgid "Username"
+msgstr "Nom d'Utilisateur"
+
+msgid "Password"
+msgstr "Mot de Passe"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "First Name"
+msgstr "Prénom"
+
+msgid "Last Name"
+msgstr "Nom de Famille"
+
+msgid "Login"
+msgstr "Connexion"
+
+msgid "Signup"
+msgstr "Inscription"
+
+msgid "Current Password"
+msgstr "Mot de Passe Actuel"
+
+msgid "New Password"
+msgstr "Nouveau Mot de Passe"
+
+msgid "Confirm Password"
+msgstr "Confirmer le Mot de Passe"
+
+msgid "Change Password"
+msgstr "Changer le Mot de Passe"
+
+msgid "Update Profile"
+msgstr "Mettre à Jour le Profil"
+
+msgid "Save Changes"
+msgstr "Enregistrer les Modifications"
+
+msgid "Cancel"
+msgstr "Annuler"
+
+# Messages
+msgid "Login successful"
+msgstr "Connexion réussie"
+
+msgid "Logout successful"
+msgstr "Déconnexion réussie"
+
+msgid "Password changed successfully"
+msgstr "Mot de passe changé avec succès"
+
+msgid "Profile updated successfully"
+msgstr "Profil mis à jour avec succès"
+
+msgid "Justification approved"
+msgstr "Justification approuvée"
+
+msgid "Justification rejected"
+msgstr "Justification rejetée"
+
+msgid "Error occurred"
+msgstr "Une erreur s'est produite"
+
+msgid "Teacher Dashboard"
+msgstr "Tableau de Bord Enseignant"
+
+msgid "Create Account"
+msgstr "Créer un compte"
+
+msgid "Create Your Teacher Account"
+msgstr "Créez votre compte enseignant"
+
+msgid "New Space"
+msgstr "Nouvel Espace"
+
+msgid "New Account"
+msgstr "Nouveau Compte"
+
+msgid ""
+"Sign up to add classes, manage students and track attendance in your "
+"personal dashboard."
+msgstr ""
+"Inscrivez-vous pour ajouter des classes, gérer les étudiants et suivre les "
+"présences dans votre tableau de bord personnel."
+
+msgid "Choose a username and password to get started."
+msgstr "Choisissez un identifiant et un mot de passe pour commencer."
+
+msgid "Registration"
+msgstr "Inscription"
+
+msgid "Active Groups"
+msgstr "Groupes Actifs"
+
+msgid "Total Enrolled"
+msgstr "Total Inscrit"
+
+msgid "Unjustified"
+msgstr "Injustifié"
+
+msgid "Create Class"
+msgstr "Créer une Classe"
+
+msgid "Add a new group to manage"
+msgstr "Ajoutez un nouveau groupe à gérer"
+
+msgid "Access complete management"
+msgstr "Accédez à la gestion complète"
+
+msgid "Create"
+msgstr "Créer"
+
+msgid "Save"
+msgstr "Enregistrer"
+
+msgid "Submit"
+msgstr "Soumettre"
+
+msgid "Delete"
+msgstr "Supprimer"
+
+msgid "Edit"
+msgstr "Modifier"
+
+msgid "Download"
+msgstr "Télécharger"
+
+msgid "Sign Up"
+msgstr "S'inscrire"
+
+msgid "Class created successfully"
+msgstr "Classe créée avec succès"
+
+msgid "Error on page load"
+msgstr "Erreur lors du chargement de la page"
+
+msgid "Presence"
+msgstr "Présence"
+
+msgid "Absence"
+msgstr "Absence"
+
+msgid "Justification Pending"
+msgstr "Justification En Attente"
+
+msgid "Justification Approved"
+msgstr "Justification Approuvée"
+
+msgid "Justification Rejected"
+msgstr "Justification Rejetée"
+
+msgid "Select a class"
+msgstr "Sélectionnez une classe"
+
+msgid "No classes available"
+msgstr "Aucune classe disponible"
+
+msgid "No classes for now"
+msgstr "Aucune classe pour le moment"
+
+msgid "Create your first class to get started"
+msgstr "Créez votre première classe pour commencer"

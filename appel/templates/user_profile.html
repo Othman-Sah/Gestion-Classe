@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+{% load appel_extras %}
+
+{% block title %}Mon Profil{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <section class="hero-section mb-5">
+                <div class="row align-items-center">
+                    <div class="col-lg-8">
+                        <span class="eyebrow d-block">👤 Profil Utilisateur</span>
+                        <h1 class="mt-3">{{ request.user.get_full_name|default:request.user.username }}</h1>
+                        <p>Gérez vos informations personnelles et les paramètres de votre compte.</p>
+                    </div>
+                    <div class="col-lg-4 text-end">
+                        <div style="font-size: 3rem; opacity: 0.7;">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Profile Information Card -->
+            <div class="card mb-4">
+                <div class="card-header" style="border-bottom: 2px solid rgba(0, 255, 136, 0.2); padding: 1.5rem;">
+                    <h5 style="margin: 0; color: var(--primary);">
+                        <i class="fas fa-info-circle me-2"></i>Informations Personnelles
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label">Nom d'utilisateur</label>
+                            <div class="form-control-static" style="padding: 0.75rem; background: rgba(0, 255, 136, 0.08); border: 2px solid rgba(0, 255, 136, 0.2); border-radius: 8px; color: var(--text-primary);">
+                                {{ request.user.username }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Email</label>
+                            <div class="form-control-static" style="padding: 0.75rem; background: rgba(0, 255, 136, 0.08); border: 2px solid rgba(0, 255, 136, 0.2); border-radius: 8px; color: var(--text-primary);">
+                                {{ request.user.email|default:"Non renseigné" }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label">Prénom</label>
+                            <div class="form-control-static" style="padding: 0.75rem; background: rgba(0, 255, 136, 0.08); border: 2px solid rgba(0, 255, 136, 0.2); border-radius: 8px; color: var(--text-primary);">
+                                {{ request.user.first_name|default:"Non renseigné" }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Nom de famille</label>
+                            <div class="form-control-static" style="padding: 0.75rem; background: rgba(0, 255, 136, 0.08); border: 2px solid rgba(0, 255, 136, 0.2); border-radius: 8px; color: var(--text-primary);">
+                                {{ request.user.last_name|default:"Non renseigné" }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">Type de Compte</label>
+                            <div class="form-control-static" style="padding: 0.75rem; background: rgba(0, 255, 136, 0.08); border: 2px solid rgba(0, 255, 136, 0.2); border-radius: 8px; color: var(--text-primary);">
+                                {% if request.user.is_staff %}
+                                    <span class="badge bg-success">Administrateur</span>
+                                {% elif request.user.etudiant_profile %}
+                                    <span class="badge bg-success">Étudiant</span>
+                                {% else %}
+                                    <span class="badge bg-success">Enseignant</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Date d'inscription</label>
+                            <div class="form-control-static" style="padding: 0.75rem; background: rgba(0, 255, 136, 0.08); border: 2px solid rgba(0, 255, 136, 0.2); border-radius: 8px; color: var(--text-primary);">
+                                {{ request.user.date_joined|date:"d/m/Y à H:i" }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Student Profile Info (if applicable) -->
+            {% if request.user.etudiant_profile %}
+                <div class="card mb-4">
+                    <div class="card-header" style="border-bottom: 2px solid rgba(0, 255, 136, 0.2); padding: 1.5rem;">
+                        <h5 style="margin: 0; color: var(--primary);">
+                            <i class="fas fa-graduation-cap me-2"></i>Informations Académiques
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label">Filière</label>
+                                <div class="form-control-static" style="padding: 0.75rem; background: rgba(0, 255, 136, 0.08); border: 2px solid rgba(0, 255, 136, 0.2); border-radius: 8px; color: var(--text-primary);">
+                                    {{ request.user.etudiant_profile.filiere.nom }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Numéro d'étudiant</label>
+                                <div class="form-control-static" style="padding: 0.75rem; background: rgba(0, 255, 136, 0.08); border: 2px solid rgba(0, 255, 136, 0.2); border-radius: 8px; color: var(--text-primary);">
+                                    {{ request.user.etudiant_profile.numero_etudiant|default:"Non renseigné" }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="form-label">Présences</label>
+                                <div class="form-control-static" style="padding: 0.75rem; background: rgba(0, 255, 136, 0.08); border: 2px solid rgba(0, 255, 136, 0.2); border-radius: 8px; color: var(--primary); font-weight: bold;">
+                                    {{ request.user.etudiant_profile.total_presences }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Absences</label>
+                                <div class="form-control-static" style="padding: 0.75rem; background: rgba(255, 68, 102, 0.08); border: 2px solid rgba(255, 68, 102, 0.2); border-radius: 8px; color: #ff8899; font-weight: bold;">
+                                    {{ request.user.etudiant_profile.total_absences }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Account Stats -->
+            <div class="row gx-4 mb-5">
+                <div class="col-md-6">
+                    <div class="stats-card">
+                        <p class="stats-label"><i class="fas fa-lock"></i> Sécurité</p>
+                        <div style="color: var(--text-secondary); font-weight: 600;">Compte Sécurisé</div>
+                        <small style="color: var(--text-secondary);">Mot de passe protégé</small>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="stats-card">
+                        <p class="stats-label"><i class="fas fa-activity"></i> Activité</p>
+                        <div style="color: var(--text-secondary); font-weight: 600;">Actif</div>
+                        <small style="color: var(--text-secondary);">Dernière connexion: Aujourd'hui</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="row g-3 mb-5">
+                <div class="col-md-6">
+                    <a href="{% url 'update_profile' %}" class="btn btn-primary w-100">
+                        <i class="fas fa-edit me-2"></i>Modifier le Profil
+                    </a>
+                </div>
+                <div class="col-md-6">
+                    <a href="{% url 'change_password' %}" class="btn btn-warning w-100">
+                        <i class="fas fa-lock me-2"></i>Changer le Mot de Passe
+                    </a>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="d-flex gap-3 mb-5">
+                <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Retour au Tableau de Bord
+                </a>
+                <a href="{% url 'logout' %}" class="btn btn-light">
+                    <i class="fas fa-sign-out-alt me-2"></i>Déconnexion
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

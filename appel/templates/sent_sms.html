@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "SMS Envoyés" %}{% endblock %}
+
+{% block content %}
+<div class="section-head text-center">
+    <h2><i class="fas fa-sms"></i> {% trans "SMS Envoyés" %}</h2>
+    <p>{% trans "Historique des notifications SMS envoyées aux étudiants et parents." %}</p>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>{% trans "Date & Heure" %}</th>
+                        <th>{% trans "Destinataire" %}</th>
+                        <th>{% trans "Numéro" %}</th>
+                        <th>{% trans "Message" %}</th>
+                        <th>{% trans "Statut" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>16 Oct 2026 14:30</td>
+                        <td>Parent (Alaoui)</td>
+                        <td>+212 600 000 001</td>
+                        <td><small>Votre enfant était absent le 16/10 au cours de Mathématiques.</small></td>
+                        <td><span class="badge bg-success">Délivré</span></td>
+                    </tr>
+                    <tr>
+                        <td>14 Oct 2026 09:15</td>
+                        <td>Parent (Bennani)</td>
+                        <td>+212 600 000 002</td>
+                        <td><small>Rappel: Réunion parents-professeurs ce samedi à 10h.</small></td>
+                        <td><span class="badge bg-success">Délivré</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

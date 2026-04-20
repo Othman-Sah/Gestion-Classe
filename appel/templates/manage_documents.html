@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Gérer les Documents" %}{% endblock %}
+
+{% block content %}
+<div class="section-head text-center">
+    <h2><i class="fas fa-folder-open"></i> {% trans "Gérer les Demandes de Documents" %}</h2>
+    <p>{% trans "Traiter les demandes administratives des étudiants." %}</p>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h4 class="mb-4 text-primary">{% trans "Demandes en attente" %}</h4>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>{% trans "Étudiant" %}</th>
+                        <th>{% trans "Document" %}</th>
+                        <th>{% trans "Date" %}</th>
+                        <th>{% trans "Commentaire" %}</th>
+                        <th>{% trans "Statut" %}</th>
+                        <th>{% trans "Actions" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for doc in pending_docs %}
+                    <tr>
+                        <td class="align-middle font-weight-bold">{{ doc.etudiant.nom }}</td>
+                        <td class="align-middle">{{ doc.document_type }}</td>
+                        <td class="align-middle">{{ doc.request_date|date:"d/m/Y H:i" }}</td>
+                        <td class="align-middle">{{ doc.comments|default:"-" }}</td>
+                        <td class="align-middle">
+                            {% if doc.status == 'pending' %}
+                                <span class="badge bg-secondary">{% trans "En attente" %}</span>
+                            {% elif doc.status == 'processing' %}
+                                <span class="badge" style="background: rgba(255, 150, 0, 0.15); color: #ff9600; border: 1px solid rgba(255, 150, 0, 0.3);">{% trans "En traitement" %}</span>
+                            {% endif %}
+                        </td>
+                        <td class="align-middle">
+                            <form method="post" class="d-flex gap-2">
+                                {% csrf_token %}
+                                <input type="hidden" name="request_id" value="{{ doc.id }}">
+                                {% if doc.status == 'pending' %}
+                                    <button type="submit" name="action" value="process" class="btn btn-warning btn-sm" title="{% trans 'Mettre en traitement' %}"><i class="fas fa-spinner"></i></button>
+                                {% endif %}
+                                <button type="submit" name="action" value="ready" class="btn btn-success btn-sm" title="{% trans 'Marquer comme prêt' %}"><i class="fas fa-check"></i></button>
+                                <button type="submit" name="action" value="reject" class="btn btn-danger btn-sm" title="{% trans 'Refuser' %}"><i class="fas fa-times"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-5">
+                            <i class="fas fa-check-circle" style="font-size: 3rem; color: var(--primary); opacity: 0.5;"></i><br>
+                            {% trans "Toutes les demandes ont été traitées." %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

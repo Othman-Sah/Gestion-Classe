@@ -1,0 +1,473 @@
+# Arabic translations for Gestion Presences
+msgid ""
+msgstr ""
+"Project-Id-Version: Gestion Presences 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-04-17 10:00+0000\n"
+"PO-Revision-Date: 2026-04-17 10:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: Arabic\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# Navigation
+msgid "Dashboard"
+msgstr "لوحة التحكم"
+
+msgid "Student Area"
+msgstr "منطقة الطالب"
+
+msgid "My Profile"
+msgstr "ملفي الشخصي"
+
+msgid "Change Password"
+msgstr "تغيير كلمة المرور"
+
+msgid "Logout"
+msgstr "تسجيل الخروج"
+
+msgid "Admin Area"
+msgstr "منطقة الإدارة"
+
+msgid "Manage Classes"
+msgstr "إدارة الفصول"
+
+msgid "Manage Justifications"
+msgstr "إدارة التبريرات"
+
+msgid "Reports"
+msgstr "التقارير"
+
+msgid "Language"
+msgstr "اللغة"
+
+# Student Dashboard
+msgid "Good morning"
+msgstr "صباح الخير"
+
+msgid "Good afternoon"
+msgstr "مساء الخير"
+
+msgid "Good evening"
+msgstr "تحية المساء"
+
+msgid "Student Portal"
+msgstr "بوابة الطالب"
+
+msgid "Class"
+msgstr "الفصل"
+
+msgid "Presences"
+msgstr "الحضور"
+
+msgid "Absences"
+msgstr "الغيابات"
+
+msgid "Pending"
+msgstr "قيد الانتظار"
+
+msgid "Your Classes Schedule"
+msgstr "جدول حصصك"
+
+msgid "Monday"
+msgstr "الاثنين"
+
+msgid "Tuesday"
+msgstr "الثلاثاء"
+
+msgid "Wednesday"
+msgstr "الأربعاء"
+
+msgid "Thursday"
+msgstr "الخميس"
+
+msgid "Friday"
+msgstr "الجمعة"
+
+msgid "From"
+msgstr "من"
+
+msgid "To"
+msgstr "إلى"
+
+msgid "Professor"
+msgstr "الأستاذ"
+
+msgid "Room"
+msgstr "القاعة"
+
+msgid "Quick Absence Justification"
+msgstr "تبرير الغياب السريع"
+
+msgid "Justify Absence"
+msgstr "تبرير الغياب"
+
+msgid "Attendance History"
+msgstr "سجل الحضور"
+
+msgid "Date"
+msgstr "التاريخ"
+
+msgid "Status"
+msgstr "الحالة"
+
+msgid "Present"
+msgstr "حاضر"
+
+msgid "Absent"
+msgstr "غائب"
+
+msgid "Justified"
+msgstr "مبرر"
+
+msgid "Approved"
+msgstr "موافق عليه"
+
+msgid "Rejected"
+msgstr "مرفوض"
+
+msgid "Action"
+msgstr "إجراء"
+
+# Admin Dashboard
+msgid "Teacher Studio"
+msgstr "استوديو المعلم"
+
+msgid "Today"
+msgstr "اليوم"
+
+msgid "Your classroom, better organized"
+msgstr "فصلك الدراسي بشكل أفضل"
+
+msgid "Track your classes in real time"
+msgstr "تابع فصولك بشكل فوري"
+
+msgid "Classes"
+msgstr "الفصول"
+
+msgid "Students"
+msgstr "الطلاب"
+
+msgid "Calls"
+msgstr "الاستدعاءات"
+
+msgid "Active groups"
+msgstr "المجموعات النشطة"
+
+msgid "Total registered"
+msgstr "الإجمالي المسجل"
+
+msgid "Today's"
+msgstr "اليوم"
+
+msgid "Rate"
+msgstr "النسبة"
+
+msgid "Presences"
+msgstr "الحضور"
+
+msgid "Create a Class"
+msgstr "إنشاء فصل"
+
+msgid "Add a new group"
+msgstr "أضف مجموعة جديدة"
+
+msgid "Create the class"
+msgstr "إنشاء الفصل"
+
+msgid "Your Classes"
+msgstr "فصولك"
+
+msgid "Access full management"
+msgstr "الوصول إلى الإدارة الكاملة"
+
+msgid "Room"
+msgstr "القاعة"
+
+msgid "Stu."
+msgstr "ط."
+
+msgid "Pres."
+msgstr "ح."
+
+msgid "Open"
+msgstr "فتح"
+
+msgid "No classes yet"
+msgstr "لا توجد فصول حتى الآن"
+
+msgid "Create your first class to start"
+msgstr "أنشئ فصلك الأول للبدء"
+
+msgid "Quick Actions"
+msgstr "إجراءات سريعة"
+
+msgid "Access main functions"
+msgstr "الوصول إلى الوظائف الرئيسية"
+
+msgid "Refresh"
+msgstr "تحديث"
+
+msgid "Justifications"
+msgstr "التبريرات"
+
+msgid "Reports"
+msgstr "التقارير"
+
+msgid "Call"
+msgstr "استدعاء"
+
+msgid "Reports & Exports"
+msgstr "التقارير والتصديرات"
+
+msgid "Generate monthly documents"
+msgstr "إنشاء المستندات الشهرية"
+
+msgid "Monthly Report"
+msgstr "التقرير الشهري"
+
+msgid "Export PDF"
+msgstr "تصدير PDF"
+
+msgid "Statistics"
+msgstr "الإحصائيات"
+
+msgid "Performance Overview"
+msgstr "نظرة عامة على الأداء"
+
+msgid "Quick analysis of each class"
+msgstr "تحليل سريع لكل فصل"
+
+msgid "Staff"
+msgstr "الموظفين"
+
+msgid "Present"
+msgstr "حاضرين"
+
+msgid "Absent"
+msgstr "غائبين"
+
+msgid "Rate"
+msgstr "النسبة"
+
+msgid "Detail"
+msgstr "التفاصيل"
+
+# Justifications
+msgid "Absence Justifications"
+msgstr "تبريرات الغياب"
+
+msgid "Examine and process"
+msgstr "افحص ومعالجة"
+
+msgid "Pending Justifications"
+msgstr "التبريرات المعلقة"
+
+msgid "To process"
+msgstr "للمعالجة"
+
+msgid "Approved"
+msgstr "موافق عليها"
+
+msgid "Accepted"
+msgstr "مقبولة"
+
+msgid "Rejected"
+msgstr "مرفوضة"
+
+msgid "Refused"
+msgstr "مرفوضة"
+
+msgid "Absence Date"
+msgstr "تاريخ الغياب"
+
+msgid "Reason"
+msgstr "السبب"
+
+msgid "Explanation"
+msgstr "الشرح"
+
+msgid "Submitted"
+msgstr "مقدمة"
+
+msgid "Approve"
+msgstr "الموافقة"
+
+msgid "Reject"
+msgstr "الرفض"
+
+msgid "No Pending Justifications"
+msgstr "لا توجد تبريرات معلقة"
+
+msgid "All justifications have been reviewed"
+msgstr "تمت مراجعة جميع التبريرات"
+
+msgid "Back to Dashboard"
+msgstr "العودة إلى لوحة التحكم"
+
+# Forms
+msgid "Username"
+msgstr "اسم المستخدم"
+
+msgid "Password"
+msgstr "كلمة المرور"
+
+msgid "Email"
+msgstr "البريد الإلكتروني"
+
+msgid "First Name"
+msgstr "الاسم الأول"
+
+msgid "Last Name"
+msgstr "اسم العائلة"
+
+msgid "Login"
+msgstr "تسجيل الدخول"
+
+msgid "Signup"
+msgstr "التسجيل"
+
+msgid "Current Password"
+msgstr "كلمة المرور الحالية"
+
+msgid "New Password"
+msgstr "كلمة المرور الجديدة"
+
+msgid "Confirm Password"
+msgstr "تأكيد كلمة المرور"
+
+msgid "Change Password"
+msgstr "تغيير كلمة المرور"
+
+msgid "Update Profile"
+msgstr "تحديث الملف الشخصي"
+
+msgid "Save Changes"
+msgstr "حفظ التغييرات"
+
+msgid "Cancel"
+msgstr "إلغاء"
+
+# Messages
+msgid "Login successful"
+msgstr "تم تسجيل الدخول بنجاح"
+
+msgid "Logout successful"
+msgstr "تم تسجيل الخروج بنجاح"
+
+msgid "Password changed successfully"
+msgstr "تم تغيير كلمة المرور بنجاح"
+
+msgid "Profile updated successfully"
+msgstr "تم تحديث الملف الشخصي بنجاح"
+
+msgid "Justification approved"
+msgstr "تم الموافقة على التبرير"
+
+msgid "Justification rejected"
+msgstr "تم رفض التبرير"
+
+msgid "Error occurred"
+msgstr "حدث خطأ"
+
+msgid "Teacher Dashboard"
+msgstr "لوحة تحكم المعلم"
+
+msgid "Create Account"
+msgstr "إنشاء حساب"
+
+msgid "Create Your Teacher Account"
+msgstr "أنشئ حساب المعلم الخاص بك"
+
+msgid "New Space"
+msgstr "مساحة جديدة"
+
+msgid "New Account"
+msgstr "حساب جديد"
+
+msgid ""
+"Sign up to add classes, manage students and track attendance in your "
+"personal dashboard."
+msgstr ""
+"قم بالتسجيل لإضافة فصول وإدارة الطلاب وتتبع الحضور في لوحة التحكم الشخصية "
+"الخاصة بك."
+
+msgid "Choose a username and password to get started."
+msgstr "اختر اسم المستخدم وكلمة المرور للبدء."
+
+msgid "Registration"
+msgstr "التسجيل"
+
+msgid "Active Groups"
+msgstr "المجموعات النشطة"
+
+msgid "Total Enrolled"
+msgstr "المجموع المسجل"
+
+msgid "Unjustified"
+msgstr "بدون عذر"
+
+msgid "Create Class"
+msgstr "إنشاء فصل"
+
+msgid "Add a new group to manage"
+msgstr "أضف مجموعة جديدة لإدارتها"
+
+msgid "Access complete management"
+msgstr "الوصول إلى الإدارة الكاملة"
+
+msgid "Create"
+msgstr "إنشاء"
+
+msgid "Save"
+msgstr "حفظ"
+
+msgid "Submit"
+msgstr "إرسال"
+
+msgid "Delete"
+msgstr "حذف"
+
+msgid "Edit"
+msgstr "تحرير"
+
+msgid "Download"
+msgstr "تحميل"
+
+msgid "Sign Up"
+msgstr "اشتراك"
+
+msgid "Class created successfully"
+msgstr "تم إنشاء الفصل بنجاح"
+
+msgid "Error on page load"
+msgstr "خطأ عند تحميل الصفحة"
+
+msgid "Presence"
+msgstr "الحضور"
+
+msgid "Absence"
+msgstr "الغياب"
+
+msgid "Justification Pending"
+msgstr "التبرير قيد الانتظار"
+
+msgid "Justification Approved"
+msgstr "تم الموافقة على التبرير"
+
+msgid "Justification Rejected"
+msgstr "تم رفض التبرير"
+
+msgid "Select a class"
+msgstr "حدد فصلاً"
+
+msgid "No classes available"
+msgstr "لا توجد فصول متاحة"
+
+msgid "No classes for now"
+msgstr "لا توجد فصول في الوقت الحالي"
+
+msgid "Create your first class to get started"
+msgstr "أنشئ فصلك الأول للبدء"

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Create Account" %}{% endblock %}
+
+{% block content %}
+    <div class="auth-wrapper">
+        <div class="row g-4 align-items-stretch">
+            <div class="col-lg-6 d-lg-flex align-items-center">
+                <div class="hero-section w-100 mb-0">
+                    <span class="eyebrow">{% trans "New Space" %}</span>
+                    <h1 class="mt-2">{% trans "Create Your Teacher Account" %}</h1>
+                    <p>{% trans "Sign up to add classes, manage students and track attendance in your personal dashboard." %}</p>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="auth-card">
+                    <div class="section-head">
+                        <div>
+                            <h2>{% trans "New Account" %}</h2>
+                            <p class="text-muted">{% trans "Choose a username and password to get started." %}</p>
+                        </div>
+                        <span class="pill">{% trans "Registration" %}</span>
+                    </div>
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.non_field_errors }}
+                        {% for field in form %}
+                            <div class="mb-3">
+                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.errors %}
+                                    <div class="alert alert-danger alert-sm mt-2 mb-0">{{ field.errors|join:", " }}</div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                        <button type="submit" class="btn btn-primary w-100">Créer le compte</button>
+                    </form>
+                    <p class="text-muted link-row mt-3">
+                        Vous avez déjà un compte ?
+                        <a href="{% url 'login' %}"><strong>Se connecter</strong></a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

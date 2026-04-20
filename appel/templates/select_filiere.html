@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Classes" %}{% endblock %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-body">
+            <h1>{% trans "Class Selection" %}</h1>
+            <p class="text-muted">{% trans "This page redirects to the main dashboard." %}</p>
+            <a class="btn btn-primary" href="{% url 'dashboard' %}">{% trans "Back to dashboard" %}</a>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Justifier une absence{% endblock %}
+
+{% block content %}
+    <section class="hero-section mb-4">
+        <span class="eyebrow d-block">Justification</span>
+        <span class="pill">{{ presence.date|date:"d/m/Y" }}</span>
+        <h1 class="mt-2">Justifier une absence</h1>
+        <p>Expliquez votre absence pour que votre enseignant puisse examiner votre demande.</p>
+    </section>
+
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="section-head">
+                        <div>
+                            <h2>Détails de l'absence</h2>
+                            <p class="text-muted">Classe : {{ student.filiere.nom }}</p>
+                        </div>
+                    </div>
+                    <div class="empty-state">
+                        <strong>Étudiant :</strong> {{ student.nom }}<br>
+                        <strong>Date :</strong> {{ presence.date|date:"d/m/Y" }}<br>
+                        <strong>Statut :</strong> Absent
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="section-head">
+                        <div>
+                            <h2>Envoyer la justification</h2>
+                            <p class="text-muted">Ajoutez un motif clair et une explication.</p>
+                        </div>
+                    </div>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            {{ form.as_p }}
+                        </div>
+                        <div class="attendance-actions">
+                            <a class="btn btn-light" href="{% url 'student_dashboard' %}">Retour</a>
+                            <button type="submit" class="btn btn-primary">Envoyer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
