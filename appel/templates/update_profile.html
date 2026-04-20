@@ -1,185 +1,69 @@
-{% extends 'base.html' %}
-{% load static %}
+{% extends "base.html" %}
+{% load i18n %}
 
-{% block title %}Mettre à Jour le Profil{% endblock %}
+{% block title %}{% trans "Mettre a jour le profil" %}{% endblock %}
 
 {% block content %}
-<div class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-md-6">
-            <!-- Page Header -->
-            <div class="mb-5 text-center">
-                <h1 class="display-5" style="background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
-                    <i class="fas fa-user-edit"></i> Mettre à Jour le Profil
-                </h1>
-                <p class="lead text-muted">Modifiez vos informations personnelles</p>
-            </div>
+        <div class="col-lg-8 col-xl-6">
+            <section class="hero-section mb-4 text-center">
+                <span class="eyebrow"><i class="fas fa-user-edit"></i> {% trans "Profil" %}</span>
+                <h1>{% trans "Mettre a jour le profil" %}</h1>
+                <p>{% trans "Ajustez vos informations personnelles dans un formulaire a l'interface plus douce et plus lisible." %}</p>
+            </section>
 
-            <!-- Messages -->
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert" style="backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2);">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <div class="card">
+                <div class="card-body">
+                    <div class="section-head">
+                        <h2><i class="fas fa-pen"></i> {% trans "Informations" %}</h2>
+                        <p>{% trans "Les champs de base de votre compte." %}</p>
                     </div>
-                {% endfor %}
-            {% endif %}
 
-            <!-- Update Profile Form Card -->
-            <div class="card" style="
-                backdrop-filter: blur(10px);
-                border: 1px solid rgba(255, 255, 255, 0.1);
-                background: linear-gradient(135deg, rgba(0, 255, 136, 0.05) 0%, rgba(0, 212, 255, 0.05) 100%);
-                box-shadow: 0 8px 32px rgba(0, 255, 136, 0.1);
-            ">
-                <div class="card-body p-4">
-                    <form method="post">
+                    <form method="post" class="d-grid gap-3">
                         {% csrf_token %}
 
-                        <!-- First Name Field -->
-                        <div class="mb-4">
-                            <label for="{{ form.first_name.id_for_label }}" class="form-label fw-bold">
-                                <i class="fas fa-user text-primary me-2"></i>Prénom
-                            </label>
+                        <div>
+                            <label for="{{ form.first_name.id_for_label }}" class="form-label">{% trans "Prenom" %}</label>
                             {{ form.first_name }}
                             {% if form.first_name.errors %}
-                                <div class="invalid-feedback d-block">
-                                    {% for error in form.first_name.errors %}
-                                        <i class="fas fa-exclamation-circle me-2"></i>{{ error }}
-                                    {% endfor %}
-                                </div>
+                                <div class="errorlist mt-2">{{ form.first_name.errors|join:", " }}</div>
                             {% endif %}
                         </div>
 
-                        <!-- Last Name Field -->
-                        <div class="mb-4">
-                            <label for="{{ form.last_name.id_for_label }}" class="form-label fw-bold">
-                                <i class="fas fa-user text-success me-2"></i>Nom de Famille
-                            </label>
+                        <div>
+                            <label for="{{ form.last_name.id_for_label }}" class="form-label">{% trans "Nom" %}</label>
                             {{ form.last_name }}
                             {% if form.last_name.errors %}
-                                <div class="invalid-feedback d-block">
-                                    {% for error in form.last_name.errors %}
-                                        <i class="fas fa-exclamation-circle me-2"></i>{{ error }}
-                                    {% endfor %}
-                                </div>
+                                <div class="errorlist mt-2">{{ form.last_name.errors|join:", " }}</div>
                             {% endif %}
                         </div>
 
-                        <!-- Email Field -->
-                        <div class="mb-4">
-                            <label for="{{ form.email.id_for_label }}" class="form-label fw-bold">
-                                <i class="fas fa-envelope text-danger me-2"></i>Adresse Email
-                            </label>
+                        <div>
+                            <label for="{{ form.email.id_for_label }}" class="form-label">{% trans "Email" %}</label>
                             {{ form.email }}
                             {% if form.email.errors %}
-                                <div class="invalid-feedback d-block">
-                                    {% for error in form.email.errors %}
-                                        <i class="fas fa-exclamation-circle me-2"></i>{{ error }}
-                                    {% endfor %}
-                                </div>
+                                <div class="errorlist mt-2">{{ form.email.errors|join:", " }}</div>
                             {% endif %}
                             {% if form.email.help_text %}
-                                <small class="form-text text-muted d-block mt-2">{{ form.email.help_text|safe }}</small>
+                                <small class="text-muted d-block mt-2">{{ form.email.help_text|safe }}</small>
                             {% endif %}
                         </div>
 
-                        <!-- Non-field Errors -->
                         {% if form.non_field_errors %}
-                            <div class="alert alert-danger mb-4" role="alert">
-                                {% for error in form.non_field_errors %}
-                                    <i class="fas fa-exclamation-triangle me-2"></i>{{ error }}
-                                {% endfor %}
-                            </div>
+                            <div class="errorlist">{{ form.non_field_errors|join:", " }}</div>
                         {% endif %}
 
-                        <!-- Submit Button -->
-                        <button type="submit" class="btn btn-lg w-100 fw-bold" style="
-                            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-                            border: none;
-                            color: var(--dark-bg);
-                            box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
-                            transition: all 0.3s ease;
-                        " onmouseover="this.style.boxShadow='0 6px 20px rgba(0, 255, 136, 0.5)'" onmouseout="this.style.boxShadow='0 4px 15px rgba(0, 255, 136, 0.3)'">
-                            <i class="fas fa-save me-2"></i>Mettre à Jour le Profil
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-save me-1"></i>{% trans "Enregistrer" %}
                         </button>
                     </form>
 
-                    <!-- Info Note -->
-                    <div class="mt-4 p-3" style="
-                        background: rgba(0, 212, 255, 0.05);
-                        border-left: 3px solid var(--secondary-color);
-                        border-radius: 4px;
-                    ">
-                        <p class="mb-0 small">
-                            <i class="fas fa-info-circle text-secondary me-2"></i>
-                            <strong>Information:</strong> Mettez à jour vos informations personnelles. L'email doit être unique.
-                        </p>
+                    <div class="d-flex flex-wrap gap-2 mt-4">
+                        <a href="{% url 'user_profile' %}" class="btn btn-outline-secondary"><i class="fas fa-arrow-left me-1"></i>{% trans "Annuler" %}</a>
+                        <a href="{% url 'change_password' %}" class="btn btn-outline-secondary"><i class="fas fa-lock me-1"></i>{% trans "Changer le mot de passe" %}</a>
                     </div>
-                </div>
-            </div>
-
-            <!-- Additional Actions -->
-            <div class="row mt-4 g-3">
-                <div class="col-6">
-                    <a href="{% url 'user_profile' %}" class="btn btn-outline-secondary w-100">
-                        <i class="fas fa-arrow-left me-2"></i>Annuler
-                    </a>
-                </div>
-                <div class="col-6">
-                    <a href="{% url 'change_password' %}" class="btn btn-outline-warning w-100">
-                        <i class="fas fa-lock me-2"></i>Changer le Mot de Passe
-                    </a>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-<!-- Custom CSS for Form Styling -->
-<style>
-    .form-control, .form-select {
-        background: rgba(0, 255, 136, 0.05) !important;
-        border: 1px solid rgba(0, 255, 136, 0.2) !important;
-        color: var(--text-color) !important;
-        padding: 0.75rem 1rem;
-        transition: all 0.3s ease;
-    }
-
-    .form-control:focus, .form-select:focus {
-        background: rgba(0, 255, 136, 0.1) !important;
-        border-color: var(--primary-color) !important;
-        box-shadow: 0 0 0 0.2rem rgba(0, 255, 136, 0.25) !important;
-        color: var(--text-color) !important;
-    }
-
-    .form-control::placeholder {
-        color: rgba(255, 255, 255, 0.5) !important;
-    }
-
-    .invalid-feedback {
-        color: #ff006e !important;
-        font-weight: 500;
-    }
-
-    .btn-outline-secondary {
-        border: 1px solid rgba(0, 255, 136, 0.3) !important;
-        color: var(--secondary-color) !important;
-    }
-
-    .btn-outline-secondary:hover {
-        background: rgba(0, 212, 255, 0.1) !important;
-        border-color: var(--secondary-color) !important;
-    }
-
-    .btn-outline-warning {
-        border: 1px solid rgba(255, 193, 7, 0.3) !important;
-        color: #ffc107 !important;
-    }
-
-    .btn-outline-warning:hover {
-        background: rgba(255, 193, 7, 0.1) !important;
-        border-color: #ffc107 !important;
-    }
-</style>
 {% endblock %}

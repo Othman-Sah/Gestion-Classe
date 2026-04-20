@@ -2,8 +2,12 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 
-from datetime import time
+from datetime import timedelta, time
+from django.utils.timezone import now
 
+from django.core.files.uploadedfile import SimpleUploadedFile
+
+from .forms import ImportExcelForm
 from .models import AbsenceJustification, ClassSchedule, Etudiant, Filiere, Presence
 
 
@@ -212,3 +216,63 @@ class ClassroomFlowTests(TestCase):
         self.assertEqual(response.status_code, 200)
         section_names = [section['filiere'].nom for section in response.context['calendar_sections'] if section['total_sessions']]
         self.assertEqual(section_names, ['GI 1', 'GI 2'])
+
+    def test_teacher_pages_render_with_clean_templates(self):
+        self.client.login(username='prof', password='securepass123')
+        filiere = Filiere.objects.create(nom='Design UI', salle='A2')
+        Etudiant.objects.create(nom='Nadia', filiere=filiere, email='nadia@example.com')
+
+        urls = [
+            reverse('dashboard'),
+            reverse('class_detail', args=[filiere.id]),
+            reverse('import_students_excel', args=[filiere.id]),
+            reverse('monthly_report'),
+            reverse('manage_justifications'),
+            reverse('calendar'),
+            reverse('user_profile'),
+            reverse('update_profile'),
+            reverse('change_password'),
+        ]
+
+        for url in urls:
+            with self.subTest(url=url):
+                response = self.client.get(url)
+                self.assertEqual(response.status_code, 200)
+
+    def test_student_pages_render_with_clean_templates(self):
+        student_user = User.objects.create_user(username='student-render', password='studentpass123')
+        filiere = Filiere.objects.create(nom='Classe B')
+        student = Etudiant.objects.create(nom='Salma', filiere=filiere, user=student_user)
+        Presence.objects.create(etudiant=student, present=False)
+
+        self.client.login(username='student-render', password='studentpass123')
+        urls = [
+            reverse('student_dashboard'),
+            reverse('calendar'),
+            reverse('absences_classes'),
+            reverse('user_profile'),
+        ]
+
+        for url in urls:
+            with self.subTest(url=url):
+                response = self.client.get(url)
+                self.assertEqual(response.status_code, 200)
+
+    def test_excel_import_form_accepts_uppercase_extensions(self):
+        form = ImportExcelForm(
+            files={'excel_file': SimpleUploadedFile('students.XLSX', b'dummy-data')},
+        )
+
+        self.assertTrue(form.is_valid())
+
+    def test_student_refresh_attendance_totals_recomputes_counts(self):
+        filiere = Filiere.objects.create(nom='Compta')
+        student = Etudiant.objects.create(nom='Nadia', filiere=filiere)
+        Presence.objects.create(etudiant=student, present=True, date=now().date())
+        Presence.objects.create(etudiant=student, present=False, date=now().date() - timedelta(days=1))
+
+        student.refresh_attendance_totals()
+        student.refresh_from_db()
+
+        self.assertEqual(student.total_presences, 1)
+        self.assertEqual(student.total_absences, 1)

@@ -1,71 +1,77 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n %}
 
-{% block title %}{% trans "Suivi Académique" %}{% endblock %}
+{% block title %}{% trans "Suivi academique" %}{% endblock %}
 
 {% block content %}
-<div class="section-head text-center">
-    <h2><i class="fas fa-chart-line"></i> {% trans "Suivi Académique" %}</h2>
-    <p>{% trans "Évolution de votre performance globale." %}</p>
-</div>
+    <section class="hero-section mb-4 text-center">
+        <span class="eyebrow"><i class="fas fa-chart-line"></i> {% trans "Suivi academique" %}</span>
+        <h1>{% trans "Progression generale" %}</h1>
+        <p>{% trans "Un apercu lisible de vos resultats et de votre rythme de progression." %}</p>
+    </section>
 
-<div class="row g-4">
-    <div class="col-md-4">
-        <div class="stats-card">
-            <h5 class="stats-label"><i class="fas fa-bullseye"></i> {% trans "Moyenne Générale" %}</h5>
-            <div class="stats-number">14.5<span style="font-size: 1.5rem; color: var(--text-secondary);">/20</span></div>
-            <p class="text-success"><i class="fas fa-arrow-up"></i> +1.2 pts vs Semestre 1</p>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="stats-card" style="border-color: rgba(0, 212, 255, 0.4);">
-            <h5 class="stats-label text-info"><i class="fas fa-trophy"></i> {% trans "Classement" %}</h5>
-            <div class="stats-number" style="background: linear-gradient(135deg, var(--secondary), #00ffcc); -webkit-background-clip: text;">5<span style="font-size: 1.5rem; color: var(--text-secondary);">ème</span></div>
-            <p class="text-secondary">{% trans "sur 35 étudiants" %}</p>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="stats-card" style="border-color: rgba(255, 0, 110, 0.4);">
-            <h5 class="stats-label text-warning"><i class="fas fa-exclamation-triangle"></i> {% trans "Avertissements" %}</h5>
-            <div class="stats-number" style="background: linear-gradient(135deg, var(--tertiary), #ff8800); -webkit-background-clip: text;">0</div>
-            <p class="text-secondary">{% trans "Assiduité et comportement" %}</p>
-        </div>
-    </div>
-</div>
-
-<div class="card mt-5">
-    <div class="card-body">
-        <h4 class="mb-4 text-primary"><i class="fas fa-tasks me-2"></i> {% trans "Progression par Module" %}</h4>
-        
-        <div class="mb-4">
-            <div class="d-flex justify-content-between mb-1">
-                <span class="font-weight-bold">Mathématiques Avancées</span>
-                <span class="text-primary">85%</span>
-            </div>
-            <div class="progress" style="height: 10px; background: rgba(0, 255, 136, 0.1);">
-                <div class="progress-bar" role="progressbar" style="width: 85%; background: var(--primary); box-shadow: var(--glow-primary);"></div>
+    <div class="row row-cols-1 row-cols-md-3 g-4 mb-4">
+        <div class="col">
+            <div class="stats-card">
+                <p class="stats-label"><i class="fas fa-bullseye"></i> {% trans "Moyenne generale" %}</p>
+                <div class="stats-number">14.5<span class="fs-4 text-muted">/20</span></div>
+                <small class="text-success"><i class="fas fa-arrow-up me-1"></i>+1.2 pts</small>
             </div>
         </div>
-
-        <div class="mb-4">
-            <div class="d-flex justify-content-between mb-1">
-                <span class="font-weight-bold">Algorithmique & Programmation</span>
-                <span class="text-secondary">92%</span>
-            </div>
-            <div class="progress" style="height: 10px; background: rgba(0, 212, 255, 0.1);">
-                <div class="progress-bar" role="progressbar" style="width: 92%; background: var(--secondary); box-shadow: var(--glow-secondary);"></div>
+        <div class="col">
+            <div class="stats-card">
+                <p class="stats-label"><i class="fas fa-trophy"></i> {% trans "Classement" %}</p>
+                <div class="stats-number">5<span class="fs-4 text-muted">e</span></div>
+                <small>{% trans "sur 35 etudiants" %}</small>
             </div>
         </div>
-
-        <div class="mb-4">
-            <div class="d-flex justify-content-between mb-1">
-                <span class="font-weight-bold">Physique Appliquée</span>
-                <span style="color: #ff9600;">60%</span>
-            </div>
-            <div class="progress" style="height: 10px; background: rgba(255, 150, 0, 0.1);">
-                <div class="progress-bar" role="progressbar" style="width: 60%; background: #ff9600; box-shadow: 0 0 10px rgba(255, 150, 0, 0.4);"></div>
+        <div class="col">
+            <div class="stats-card">
+                <p class="stats-label"><i class="fas fa-exclamation-triangle"></i> {% trans "Avertissements" %}</p>
+                <div class="stats-number">0</div>
+                <small>{% trans "assiduite et comportement" %}</small>
             </div>
         </div>
     </div>
-</div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="section-head">
+                <h2><i class="fas fa-tasks"></i> {% trans "Progression par module" %}</h2>
+                <p>{% trans "Des repères simples pour suivre l'evolution de chaque matiere." %}</p>
+            </div>
+
+            <div class="d-grid gap-4">
+                <div>
+                    <div class="d-flex justify-content-between mb-1">
+                        <span class="fw-semibold">Mathématiques avancées</span>
+                        <span class="text-primary fw-semibold">85%</span>
+                    </div>
+                    <div class="progress" style="height: 10px;">
+                        <div class="progress-bar" style="width: 85%;"></div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="d-flex justify-content-between mb-1">
+                        <span class="fw-semibold">Algorithmique et programmation</span>
+                        <span class="text-primary fw-semibold">92%</span>
+                    </div>
+                    <div class="progress" style="height: 10px;">
+                        <div class="progress-bar" style="width: 92%;"></div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="d-flex justify-content-between mb-1">
+                        <span class="fw-semibold">Physique appliquée</span>
+                        <span class="text-primary fw-semibold">60%</span>
+                    </div>
+                    <div class="progress" style="height: 10px;">
+                        <div class="progress-bar" style="width: 60%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

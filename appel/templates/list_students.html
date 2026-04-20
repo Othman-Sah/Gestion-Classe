@@ -1,126 +1,125 @@
 {% extends "base.html" %}
 {% load appel_extras %}
+{% load i18n %}
+{% load i18n %}
 
 {% block title %}{{ filiere.nom }}{% endblock %}
 
 {% block content %}
-    <section class="hero-section mb-5">
-        <div class="row align-items-stretch">
+    <section class="hero-section mb-4">
+        <div class="row align-items-center g-4">
             <div class="col-lg-8">
-                <span class="eyebrow d-block"><i class="fas fa-book"></i> Gestion de classe</span>
-                <h1 class="mt-3">{{ filiere.nom }}</h1>
-                <p>Gérez complètement votre classe: inscriptions, appels quotidiens, justifications et rapports d'absence.</p>
+                <span class="eyebrow"><i class="fas fa-book"></i> {% trans "Gestion de classe" %}</span>
+                <h1>{{ filiere.nom }}</h1>
+                <p>{% trans "Gerez les inscriptions, l'appel du jour, les justifications et les exports depuis une seule page." %}</p>
             </div>
-            <aside class="col-lg-4 spotlight d-flex flex-column justify-content-center">
-                <span class="eyebrow"><i class="fas fa-chart-line"></i> Informations rapides</span>
-                <ul class="mb-0">
-                    <li><i class="fas fa-door-open"></i> Salle: <strong>{{ filiere.salle|default:"NC" }}</strong></li>
-                    <li><i class="fas fa-users"></i> Effectif: <strong>{{ students|length }}</strong></li>
-                    <li><i class="fas fa-calendar"></i> Aujourd'hui: <strong>{{ today|date:"d/m/Y" }}</strong></li>
-                </ul>
-            </aside>
+            <div class="col-lg-4">
+                <div class="spotlight h-100">
+                    <span class="eyebrow"><i class="fas fa-chart-line"></i> {% trans "Informations rapides" %}</span>
+                    <ul class="mb-0">
+                        <li>{% trans "Salle" %}: <strong>{{ filiere.salle|default:"-" }}</strong></li>
+                        <li>{% trans "Effectif" %}: <strong>{{ students|length }}</strong></li>
+                        <li>{% trans "Aujourd'hui" %}: <strong>{{ today|date:"d/m/Y" }}</strong></li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </section>
 
-    <!-- Statistics -->
-    <div class="row row-cols-1 row-cols-md-4 g-4 mb-5">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 g-4 mb-4">
         <div class="col">
             <div class="stats-card">
-                <p class="stats-label"><i class="fas fa-users"></i> Total</p>
+                <p class="stats-label"><i class="fas fa-users"></i> {% trans "Total" %}</p>
                 <div class="stats-number">{{ students|length }}</div>
-                <small style="color: var(--text-secondary);">Inscrits</small>
+                <small>{% trans "inscrits" %}</small>
             </div>
         </div>
         <div class="col">
             <div class="stats-card">
-                <p class="stats-label"><i class="fas fa-check-circle"></i> Présents</p>
-                <div class="stats-number" style="color: var(--primary);">{{ present_count|default:0 }}</div>
-                <small style="color: var(--text-secondary);">Aujourd'hui</small>
+                <p class="stats-label"><i class="fas fa-check-circle"></i> {% trans "Present(s)" %}</p>
+                <div class="stats-number">{{ present_count|default:0 }}</div>
+                <small>{% trans "aujourd'hui" %}</small>
             </div>
         </div>
         <div class="col">
             <div class="stats-card">
-                <p class="stats-label"><i class="fas fa-times-circle"></i> Absents</p>
-                <div class="stats-number" style="color: #ff8888;">{{ absent_count|default:0 }}</div>
-                <small style="color: var(--text-secondary);">Aujourd'hui</small>
+                <p class="stats-label"><i class="fas fa-times-circle"></i> {% trans "Absent(s)" %}</p>
+                <div class="stats-number">{{ absent_count|default:0 }}</div>
+                <small>{% trans "aujourd'hui" %}</small>
             </div>
         </div>
         <div class="col">
             <div class="stats-card">
-                <p class="stats-label"><i class="fas fa-percentage"></i> Taux</p>
-                <div class="stats-number" style="font-size: 2.5rem;">{% if students|length > 0 %}{{ attendance_rate|default:"—" }}%{% else %}—{% endif %}</div>
-                <small style="color: var(--text-secondary);">Présences</small>
+                <p class="stats-label"><i class="fas fa-percentage"></i> {% trans "Taux" %}</p>
+                <div class="stats-number" style="font-size: 2rem;">
+                    {% if students|length > 0 %}
+                        {{ attendance_rate|default:"-" }}%
+                    {% else %}
+                        -
+                    {% endif %}
+                </div>
+                <small>{% trans "presences" %}</small>
             </div>
         </div>
     </div>
 
-    <!-- Management Sections -->
-    <div class="row g-4 mb-5">
-        <!-- Add Student -->
+    <div class="row g-4 mb-4">
         <div class="col-lg-6">
-            <div class="card">
+            <div class="card h-100">
                 <div class="card-body">
                     <div class="section-head">
-                        <h2><i class="fas fa-user-plus"></i> Ajouter un Étudiant</h2>
-                        <p>Inscrivez un nouvel étudiant dans {{ filiere.nom }}</p>
+                        <h2><i class="fas fa-user-plus"></i> {% trans "Ajouter un etudiant" %}</h2>
+                        <p>{% trans "Inscrivez un nouvel etudiant dans cette classe." %}</p>
                     </div>
-                    <form method="post">
+                    <form method="post" class="d-grid gap-3">
                         {% csrf_token %}
                         <input type="hidden" name="action" value="add_student">
                         {{ student_form.as_p }}
-                        <button type="submit" class="btn btn-primary w-100"><i class="fas fa-plus"></i> Ajouter l'étudiant</button>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-plus me-1"></i>{% trans "Ajouter l'etudiant" %}
+                        </button>
                     </form>
                 </div>
             </div>
         </div>
 
-        <!-- Quick Actions & Reports -->
         <div class="col-lg-6">
-            <div class="card">
+            <div class="card h-100">
                 <div class="card-body">
                     <div class="section-head">
-                        <h2><i class="fas fa-bolt"></i> Actions & Rapports</h2>
-                        <p>Accédez rapidement aux fonctions principales</p>
+                        <h2><i class="fas fa-bolt"></i> {% trans "Actions rapides" %}</h2>
+                        <p>{% trans "Accedez directement aux outils utiles." %}</p>
                     </div>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.8rem;">
-                        <a class="quick-action" href="{% url 'dashboard' %}">
-                            <i class="fas fa-home"></i> Accueil
-                        </a>
-                        <a class="quick-action" href="{% url 'import_students_excel' filiere.id %}">
-                            <i class="fas fa-upload"></i> Importer
-                        </a>
-                        <a class="quick-action" href="{% url 'generate_monthly_report' filiere.id %}">
-                            <i class="fas fa-file-pdf"></i> Export PDF
-                        </a>
-                        <a class="quick-action" href="{% url 'dashboard' %}">
-                            <i class="fas fa-chart-bar"></i> Stats
-                        </a>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a class="quick-action" href="{% url 'dashboard' %}"><i class="fas fa-home"></i> {% trans "Accueil" %}</a>
+                        <a class="quick-action" href="{% url 'import_students_excel' filiere.id %}"><i class="fas fa-upload"></i> {% trans "Importer" %}</a>
+                        <a class="quick-action" href="{% url 'generate_monthly_report' filiere.id %}"><i class="fas fa-file-pdf"></i> {% trans "Exporter PDF" %}</a>
+                        <a class="quick-action" href="{% url 'dashboard' %}"><i class="fas fa-chart-bar"></i> {% trans "Statistiques" %}</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Attendance Section -->
-    <div class="card mb-5">
+    <div class="card mb-4">
         <div class="card-body">
             <div class="section-head">
-                <h2><i class="fas fa-pencil-alt"></i> Appel du {{ today|date:"d/m/Y" }}</h2>
-                <p>Enregistrez la présence de vos étudiants pour cette séance</p>
+                <h2><i class="fas fa-pencil-alt"></i> {% trans "Appel du jour" %}</h2>
+                <p>{% trans "Enregistrez la presence des etudiants pour cette seance." %}</p>
             </div>
             {% if students %}
                 <form method="post" action="{% url 'save_attendance' filiere.id %}">
                     {% csrf_token %}
                     <div class="table-responsive">
-                        <table class="table table-hover mb-0">
+                        <table class="table align-middle">
                             <thead>
                                 <tr>
-                                    <th><i class="fas fa-user"></i> Nom Complet</th>
-                                    <th><i class="fas fa-hashtag"></i> Numéro</th>
-                                    <th><i class="fas fa-envelope"></i> Email</th>
-                                    <th><i class="fas fa-check-double"></i> Présences</th>
-                                    <th><i class="fas fa-times-circle"></i> Absences</th>
-                                    <th style="text-align: center;"><i class="fas fa-user-check"></i> Présent</th>
+                                    <th>{% trans "Nom complet" %}</th>
+                                    <th>{% trans "Numero" %}</th>
+                                    <th>{% trans "Email" %}</th>
+                                    <th>{% trans "Presences" %}</th>
+                                    <th>{% trans "Absences" %}</th>
+                                    <th class="text-center">{% trans "Present" %}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -129,9 +128,9 @@
                                         <td><strong>{{ student.nom }}</strong></td>
                                         <td>{{ student.numero_etudiant|default:"-" }}</td>
                                         <td>{{ student.email|default:"-" }}</td>
-                                        <td><span style="color: var(--primary);">{{ student.total_presences }}</span></td>
-                                        <td><span style="color: #ff8888;">{{ student.total_absences }}</span></td>
-                                        <td style="text-align: center;">
+                                        <td>{{ student.total_presences }}</td>
+                                        <td>{{ student.total_absences }}</td>
+                                        <td class="text-center">
                                             <input class="form-check-input" type="checkbox" name="present_{{ student.id }}"{% if attendance_map|get_item:student.id %} checked{% endif %}>
                                         </td>
                                     </tr>
@@ -139,37 +138,35 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="mt-4">
-                        <button type="submit" class="btn btn-success btn-lg w-100">
-                            <i class="fas fa-save"></i> Enregistrer l'appel
-                        </button>
-                    </div>
+                    <button type="submit" class="btn btn-primary w-100 mt-3">
+                        <i class="fas fa-save me-1"></i>{% trans "Enregistrer l'appel" %}
+                    </button>
                 </form>
             {% else %}
-                <div class="empty-state" style="text-align: center; padding: 2rem;">
-                    <i class="fas fa-inbox" style="font-size: 3rem; color: var(--text-secondary); margin-bottom: 1rem; display: block;"></i>
-                    <h3 style="color: var(--text-primary);">Aucun Étudiant</h3>
-                    <p style="color: var(--text-secondary);">Cette classe n'a pas encore d'étudiants. Ajoutez-en un pour commencer.</p>
+                <div class="empty-state">
+                    <i class="fas fa-inbox fs-1 mb-3 d-block text-muted"></i>
+                    <h3 class="h5 mb-2">{% trans "Aucun etudiant" %}</h3>
+                    <p class="mb-0">{% trans "Cette classe n'a pas encore d'etudiants. Ajoutez-en un pour commencer." %}</p>
                 </div>
             {% endif %}
         </div>
     </div>
-    <!-- Justifications Section -->
+
     <div class="card">
         <div class="card-body">
             <div class="section-head">
-                <h2><i class="fas fa-file-upload"></i> Justifications Reçues</h2>
-                <p>Consultez les demandes soumises par les étudiants</p>
+                <h2><i class="fas fa-file-signature"></i> {% trans "Justifications recues" %}</h2>
+                <p>{% trans "Consultez les demandes soumises par les etudiants." %}</p>
             </div>
             {% if justifications %}
                 <div class="table-responsive">
-                    <table class="table table-hover mb-0">
+                    <table class="table align-middle">
                         <thead>
                             <tr>
-                                <th><i class="fas fa-user"></i> Étudiant</th>
-                                <th><i class="fas fa-calendar"></i> Date</th>
-                                <th><i class="fas fa-file"></i> Motif</th>
-                                <th><i class="fas fa-badge"></i> Statut</th>
+                                <th>{% trans "Etudiant" %}</th>
+                                <th>{% trans "Date" %}</th>
+                                <th>{% trans "Motif" %}</th>
+                                <th>{% trans "Statut" %}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -180,17 +177,11 @@
                                     <td>{{ justification.reason|truncatewords:5 }}</td>
                                     <td>
                                         {% if justification.get_status_display == "Approuvée" %}
-                                            <span class="pill" style="background: rgba(0, 255, 0, 0.2); border: 1px solid var(--primary); color: var(--primary);">
-                                                <i class="fas fa-check"></i> {{ justification.get_status_display }}
-                                            </span>
+                                            <span class="badge bg-success">{{ justification.get_status_display }}</span>
                                         {% elif justification.get_status_display == "En attente" %}
-                                            <span class="pill" style="background: rgba(255, 165, 0, 0.2); border: 1px solid #ffa500; color: #ffa500;">
-                                                <i class="fas fa-hourglass"></i> {{ justification.get_status_display }}
-                                            </span>
+                                            <span class="badge bg-warning">{{ justification.get_status_display }}</span>
                                         {% else %}
-                                            <span class="pill" style="background: rgba(255, 136, 136, 0.2); border: 1px solid #ff8888; color: #ff8888;">
-                                                <i class="fas fa-times"></i> {{ justification.get_status_display }}
-                                            </span>
+                                            <span class="badge bg-danger">{{ justification.get_status_display }}</span>
                                         {% endif %}
                                     </td>
                                 </tr>
@@ -199,10 +190,10 @@
                     </table>
                 </div>
             {% else %}
-                <div class="empty-state" style="text-align: center; padding: 2rem;">
-                    <i class="fas fa-check-circle" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem; display: block;"></i>
-                    <h3 style="color: var(--text-primary);">Aucune Justification</h3>
-                    <p style="color: var(--text-secondary);">Aucune demande de justification reçue pour le moment.</p>
+                <div class="empty-state">
+                    <i class="fas fa-check-circle fs-1 mb-3 d-block text-muted"></i>
+                    <h3 class="h5 mb-2">{% trans "Aucune justification" %}</h3>
+                    <p class="mb-0">{% trans "Aucune demande de justification n'a encore ete recue." %}</p>
                 </div>
             {% endif %}
         </div>

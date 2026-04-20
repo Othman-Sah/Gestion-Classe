@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Count, Q
 from django.utils.timezone import now
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
@@ -24,6 +25,20 @@ class Etudiant(models.Model):
 
     def __str__(self):
         return self.nom
+
+    def refresh_attendance_totals(self, save=True):
+        """Recompute attendance counters from the related presence records."""
+        totals = self.presences.aggregate(
+            present_count=Count('id', filter=Q(present=True)),
+            absent_count=Count('id', filter=Q(present=False)),
+        )
+        self.total_presences = totals['present_count'] or 0
+        self.total_absences = totals['absent_count'] or 0
+
+        if save:
+            self.save(update_fields=['total_presences', 'total_absences'])
+
+        return self.total_presences, self.total_absences
 
 class Presence(models.Model):
     etudiant = models.ForeignKey('Etudiant', on_delete=models.CASCADE, related_name='presences')

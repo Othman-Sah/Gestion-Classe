@@ -1,171 +1,154 @@
 {% extends "base.html" %}
 {% load appel_extras %}
 {% load i18n %}
-{% load i18n %}
 
-{% block title %}Espace étudiant{% endblock %}
+{% block title %}{% trans "Espace etudiant" %}{% endblock %}
 
 {% block content %}
-    <!-- Enhanced Hero Section with Badge -->
-    <section class="hero-section mb-5" style="padding-bottom: 2rem;">
-        <div class="row align-items-stretch">
+    <section class="hero-section mb-4">
+        <div class="row align-items-center g-4">
             <div class="col-lg-8">
-                <span class="eyebrow d-block">� Bienvenue</span>
-                <span class="pill" style="display: inline-block; margin-bottom: 1rem;"><i class="fas fa-graduation-cap"></i> {{ student.filiere.nom }}</span>
-                <h1 class="mt-3" style="font-size: 2.8rem;">{{ student.nom }} <span style="font-size: 120%;">👑</span></h1>
-                <p style="font-size: 1.1rem; color: var(--text-secondary);">Votre tableau de bord personnalisé pour gérer présences et justifications</p>
-            </div>
-            <aside class="col-lg-4" style="display: flex; flex-direction: column; justify-content: center; align-items: flex-end;">
-                <div style="text-align: right; padding: 2rem;">
-                    <div style="font-size: 4rem; opacity: 0.7; margin-bottom: 1rem;">📚</div>
-                    <small style="display: block; color: var(--text-secondary); margin-bottom: 0.5rem;">Inscription: {{ student.date_inscription|date:'d/m/Y' }}</small>
-                    <small style="display: block; color: var(--primary-color); font-weight: bold;">Étudiant depuis {{ student.date_inscription|timesince }} </small>
+                <span class="eyebrow"><i class="fas fa-user-graduate"></i> {% trans "Espace etudiant" %}</span>
+                <h1>{{ student.nom }}</h1>
+                <p>{% trans "Votre espace personnel pour consulter les presences, suivre les absences et deposer une justification quand il le faut." %}</p>
+                <div class="d-flex flex-wrap gap-2 mt-3">
+                    <span class="pill"><i class="fas fa-graduation-cap"></i> {{ student.filiere.nom }}</span>
+                    <span class="pill"><i class="fas fa-calendar-check"></i> {{ student.date_inscription|date:'d/m/Y' }}</span>
+                    <span class="pill"><i class="fas fa-user-clock"></i> {{ student.date_inscription|timesince }}</span>
                 </div>
-            </aside>
+            </div>
+            <div class="col-lg-4">
+                <div class="spotlight h-100">
+                    <span class="eyebrow"><i class="fas fa-id-card"></i> {% trans "Repere rapide" %}</span>
+                    <ul class="mb-0">
+                        <li>{% trans "Classe" %}: <strong>{{ student.filiere.nom }}</strong></li>
+                        <li>{% trans "Presences" %}: <strong>{{ stats.presence_count }}</strong></li>
+                        <li>{% trans "Absences" %}: <strong>{{ stats.absence_count }}</strong></li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </section>
 
-    <div class="row row-cols-1 row-cols-md-4 g-4 mb-5">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 g-4 mb-4">
         <div class="col">
-            <div class="stats-card" style="position: relative; overflow: hidden; border: 2px solid rgba(0, 255, 136, 0.2);">
-                <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, rgba(0, 255, 136, 0.05) 0%, transparent 100%); z-index: -1;"></div>
-                <p class="stats-label"><i class="fas fa-door-open" style="color: var(--primary-color); font-size: 1.3rem;"></i> Classe</p>
-                <div class="stats-number" style="font-size: 1.6rem; color: var(--primary-color);">{{ student.filiere.nom|truncatewords:2 }}</div>
-                <small style="color: var(--text-secondary);">Formation actuelle</small>
+            <div class="stats-card">
+                <p class="stats-label"><i class="fas fa-door-open"></i> {% trans "Classe" %}</p>
+                <div class="stats-number" style="font-size:1.7rem;">{{ student.filiere.nom|truncatewords:2 }}</div>
+                <small>{% trans "formation actuelle" %}</small>
             </div>
         </div>
         <div class="col">
-            <div class="stats-card" style="position: relative; overflow: hidden; border: 2px solid rgba(40, 167, 69, 0.2);">
-                <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, rgba(40, 167, 69, 0.05) 0%, transparent 100%); z-index: -1;"></div>
-                <p class="stats-label"><i class="fas fa-check-circle" style="color: #28a745; font-size: 1.3rem;"></i> Présences</p>
-                <div class="stats-number" style="color: #28a745; font-size: 2.5rem;">{{ stats.presence_count }}</div>
-                <small style="color: var(--text-secondary);">Enregistrées</small>
+            <div class="stats-card">
+                <p class="stats-label"><i class="fas fa-check-circle"></i> {% trans "Presences" %}</p>
+                <div class="stats-number">{{ stats.presence_count }}</div>
+                <small>{% trans "enregistrees" %}</small>
             </div>
         </div>
         <div class="col">
-            <div class="stats-card" style="position: relative; overflow: hidden; border: 2px solid rgba(255, 102, 102, 0.2);">
-                <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, rgba(255, 102, 102, 0.05) 0%, transparent 100%); z-index: -1;"></div>
-                <p class="stats-label"><i class="fas fa-times-circle" style="color: #ff6666; font-size: 1.3rem;"></i> Absences</p>
-                <div class="stats-number" style="color: #ff6666; font-size: 2.5rem;">{{ stats.absence_count }}</div>
-                <small style="color: var(--text-secondary);">À gérer</small>
+            <div class="stats-card">
+                <p class="stats-label"><i class="fas fa-times-circle"></i> {% trans "Absences" %}</p>
+                <div class="stats-number">{{ stats.absence_count }}</div>
+                <small>{% trans "a traiter" %}</small>
             </div>
         </div>
         <div class="col">
-            <div class="stats-card" style="position: relative; overflow: hidden; border: 2px solid rgba(0, 212, 255, 0.2);">
-                <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, rgba(0, 212, 255, 0.05) 0%, transparent 100%); z-index: -1;"></div>
-                <p class="stats-label"><i class="fas fa-thumbs-up" style="color: #00d4ff; font-size: 1.3rem;"></i> Approuvées</p>
-                <div class="stats-number" style="color: #00d4ff; font-size: 2.5rem;">{{ stats.justified_count }}</div>
-                <small style="color: var(--text-secondary);">Justifications</small>
+            <div class="stats-card">
+                <p class="stats-label"><i class="fas fa-thumbs-up"></i> {% trans "Justifiees" %}</p>
+                <div class="stats-number">{{ stats.justified_count }}</div>
+                <small>{% trans "demandes approuvees" %}</small>
             </div>
         </div>
     </div>
 
     {% if stats.absence_count > 0 %}
         {% with percentage=stats.justified_count|mul:100|div:stats.absence_count %}
-            <div class="card mb-5" style="border: 2px solid rgba(0, 255, 136, 0.2); background: linear-gradient(135deg, rgba(0, 255, 136, 0.05) 0%, rgba(0, 212, 255, 0.05) 100%); position: relative; overflow: hidden;">
+            <div class="card mb-4">
                 <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
                         <div>
-                            <h5 style="margin: 0; color: var(--text-color);"><i class="fas fa-chart-line me-2" style="color: var(--primary-color);"></i>Taux de Justification</h5>
-                            <small style="color: var(--text-secondary);">Progression de vos justifications d'absence</small>
+                            <div class="section-head mb-0">
+                                <h2><i class="fas fa-chart-line"></i> {% trans "Taux de justification" %}</h2>
+                                <p>{% trans "Suivez la part des absences deja traitees." %}</p>
+                            </div>
                         </div>
-                        <span class="badge" style="background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%); font-size: 1rem; padding: 0.5rem 1rem;">{{ percentage|floatformat:0 }}%</span>
+                        <span class="pill">{{ percentage|floatformat:0 }}%</span>
                     </div>
-                    <div class="progress" style="height: 30px; background: rgba(0, 255, 136, 0.1); border: 2px solid rgba(0, 255, 136, 0.2); border-radius: 10px; overflow: hidden;">
-                        <div class="progress-bar" role="progressbar" style="width: {{ percentage|floatformat:0 }}%; background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center;" aria-valuenow="{{ percentage|floatformat:0 }}" aria-valuemin="0" aria-valuemax="100">
-                            {% if percentage > 10 %}<span style="color: var(--dark-bg); font-weight: bold; font-size: 0.95rem;">{{ percentage|floatformat:0 }}%</span>{% endif %}
-                        </div>
+                    <div class="progress" style="height: 14px;">
+                        <div class="progress-bar" role="progressbar" style="width: {{ percentage|floatformat:0 }}%;" aria-valuenow="{{ percentage|floatformat:0 }}" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
-                    <div class="mt-3 row">
-                        <div class="col-6">
-                            <small style="color: var(--text-secondary); display: block;"><i class="fas fa-check-circle" style="color: #28a745;"></i> <strong>{{ stats.justified_count }}/{{ stats.absence_count }}</strong> justifiées</small>
-                        </div>
-                        <div class="col-6 text-end">
-                            <small style="color: var(--text-secondary); display: block;"><i class="fas fa-hourglass-half" style="color: #ffc107;"></i> <strong>{{ stats.pending_absence_count }}</strong> en attente</small>
-                        </div>
+                    <div class="d-flex justify-content-between mt-3 text-muted small">
+                        <span>{{ stats.justified_count }}/{{ stats.absence_count }}</span>
+                        <span>{{ stats.pending_absence_count }} {% trans "en attente" %}</span>
                     </div>
                 </div>
             </div>
         {% endwith %}
     {% endif %}
 
-    <!-- Class Schedule/Timetable Section -->
-    <div id="schedule-section" class="card mb-5" style="border: 2px solid rgba(0, 255, 136, 0.1);">
-        <div style="background: linear-gradient(135deg, rgba(0, 255, 136, 0.1) 0%, transparent 100%); padding: 1.5rem; border-bottom: 2px solid rgba(0, 255, 136, 0.2);">
-            <h2 style="margin: 0; color: var(--primary-color);"><i class="fas fa-calendar-alt me-2"></i> Emploi du Temps Hebdomadaire</h2>
-            <p style="margin: 0.5rem 0 0 0; color: var(--text-secondary);">Votre programme complet de cours</p>
-        </div>
-        
-        {% if schedule %}
-            <div class="card-body">
+    <div class="card mb-4" id="schedule-section">
+        <div class="card-body">
+            <div class="section-head">
+                <h2><i class="fas fa-calendar-alt"></i> {% trans "Emploi du temps hebdomadaire" %}</h2>
+                <p>{% trans "Consultez les cours planifies pour votre classe." %}</p>
+            </div>
+
+            {% if schedule %}
                 <div class="table-responsive">
-                    <table class="table" style="margin: 0;">
-                        <thead style="background: rgba(0, 255, 136, 0.05); border-bottom: 2px solid rgba(0, 255, 136, 0.2);">
+                    <table class="table align-middle">
+                        <thead>
                             <tr>
-                                <th style="color: var(--primary-color); font-weight: 700; padding: 1rem 0.75rem;">📅 Jour</th>
-                                <th style="color: var(--primary-color); font-weight: 700; padding: 1rem 0.75rem;">⏰ Horaire</th>
-                                <th style="color: var(--primary-color); font-weight: 700; padding: 1rem 0.75rem;">📖 Matière</th>
-                                <th style="color: var(--primary-color); font-weight: 700; padding: 1rem 0.75rem;">👨‍🏫 Professeur</th>
-                                <th style="color: var(--primary-color); font-weight: 700; padding: 1rem 0.75rem;">🏫 Salle</th>
+                                <th>{% trans "Jour" %}</th>
+                                <th>{% trans "Horaire" %}</th>
+                                <th>{% trans "Matiere" %}</th>
+                                <th>{% trans "Professeur" %}</th>
+                                <th>{% trans "Salle" %}</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for class_item in schedule %}
-                                <tr style="border-bottom: 1px solid rgba(0, 255, 136, 0.1); transition: all 0.3s ease;" onmouseover="this.style.backgroundColor='rgba(0, 255, 136, 0.08)'" onmouseout="this.style.backgroundColor='transparent'">
-                                    <td style="padding: 1rem 0.75rem; color: var(--text-color); font-weight: 600;">
-                                        <strong style="color: var(--primary-color);">{{ class_item.get_day_of_week_display }}</strong>
-                                    </td>
-                                    <td style="padding: 1rem 0.75rem; color: var(--text-color);">{{ class_item.start_time|time:"H:i" }}-{{ class_item.end_time|time:"H:i" }}</td>
-                                    <td style="padding: 1rem 0.75rem; color: var(--primary-color); font-weight: 700;"><i class="fas fa-book me-1"></i>{{ class_item.subject }}</td>
-                                    <td style="padding: 1rem 0.75rem; color: var(--text-secondary);">{{ class_item.professor|default:"—" }}</td>
-                                    <td style="padding: 1rem 0.75rem; color: var(--text-secondary);"><span style="background: rgba(0, 255, 136, 0.1); padding: 0.4rem 0.8rem; border-radius: 20px;">{{ class_item.room|default:"—" }}</span></td>
+                                <tr>
+                                    <td><strong>{{ class_item.get_day_of_week_display }}</strong></td>
+                                    <td>{{ class_item.start_time|time:"H:i" }} - {{ class_item.end_time|time:"H:i" }}</td>
+                                    <td>{{ class_item.subject }}</td>
+                                    <td>{{ class_item.professor|default:"-" }}</td>
+                                    <td>{{ class_item.room|default:"-" }}</td>
                                 </tr>
                             {% endfor %}
                         </tbody>
                     </table>
                 </div>
-            </div>
-        {% else %}
-            <div class="card-body">
-                <div class="empty-state" style="text-align: center; padding: 2rem;">
-                    <i class="fas fa-calendar" style="font-size: 3rem; margin-bottom: 1rem; display: block; opacity: 0.5;"></i>
-                    <p style="color: var(--text-secondary);">Aucun emploi du temps disponible</p>
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-calendar-days fs-1 mb-3 d-block text-muted"></i>
+                    <p class="mb-0">{% trans "Aucun emploi du temps disponible pour le moment." %}</p>
                 </div>
-            </div>
-        {% endif %}
+            {% endif %}
+        </div>
     </div>
-{% endblock %}
 
-    <!-- Quick Absence Justification Section -->
     {% if stats.pending_absence_count > 0 %}
-        <div class="card mb-5" style="border: 2px solid rgba(255, 136, 136, 0.3); background: linear-gradient(135deg, rgba(255, 68, 102, 0.05) 0%, rgba(255, 136, 136, 0.05) 100%);">
+        <div class="card mb-4">
             <div class="card-body">
                 <div class="section-head">
-                    <h2><i class="fas fa-exclamation-triangle" style="color: #ff6666;"></i> Absences en Attente de Justification</h2>
-                    <p style="color: #ff8888;">{{ stats.pending_absence_count }} absence(s) à justifier</p>
+                    <h2><i class="fas fa-exclamation-triangle"></i> {% trans "Absences en attente" %}</h2>
+                    <p>{% trans "Les absences non justifiees apparaissent ici." %}</p>
                 </div>
-                
                 <div class="row g-3">
                     {% for presence in presences %}
                         {% if not presence.present and not presence.justification %}
-                            <div class="col-md-6">
-                                <div class="card" style="border: 1px solid rgba(255, 136, 136, 0.2); cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.boxShadow='0 4px 15px rgba(255, 136, 136, 0.3)'" onmouseout="this.style.boxShadow='none'">
+                            <div class="col-md-6 col-xl-4">
+                                <div class="card h-100">
                                     <div class="card-body">
-                                        <div class="d-flex justify-content-between align-items-start">
+                                        <div class="d-flex justify-content-between gap-3">
                                             <div>
-                                                <h5 style="color: var(--primary); margin-bottom: 0.5rem;">
-                                                    <i class="fas fa-calendar-times me-2" style="color: #ff6666;"></i>
-                                                    {{ presence.date|date:"d/m/Y" }}
-                                                </h5>
-                                                <small style="color: var(--text-secondary);">
-                                                    {{ presence.date|date:"l" }}
-                                                </small>
+                                                <strong>{{ presence.date|date:"d/m/Y" }}</strong><br>
+                                                <small class="text-muted">{{ presence.date|date:"l" }}</small>
                                             </div>
-                                            <span class="badge bg-danger">⏳ En attente</span>
+                                            <span class="badge bg-danger">{% trans "En attente" %}</span>
                                         </div>
-                                        <hr style="border-color: rgba(255, 136, 136, 0.2); margin: 0.8rem 0;">
-                                        <a href="{% url 'justify_absence' presence.id %}" class="btn btn-sm btn-outline-danger w-100">
-                                            <i class="fas fa-upload me-1"></i> Justifier Maintenant
+                                        <a href="{% url 'justify_absence' presence.id %}" class="btn btn-outline-secondary w-100 mt-3">
+                                            <i class="fas fa-file-upload me-1"></i>{% trans "Justifier" %}
                                         </a>
                                     </div>
                                 </div>
@@ -177,45 +160,42 @@
         </div>
     {% endif %}
 
-    <div class="row g-4 mb-5">
+    <div class="row g-4 mb-4">
         <div class="col-lg-6">
-            <div class="card">
+            <div class="card h-100">
                 <div class="card-body">
                     <div class="section-head">
-                        <h2><i class="fas fa-building"></i> Infos Classe</h2>
-                        <p>Informations principales sur votre groupe</p>
+                        <h2><i class="fas fa-building"></i> {% trans "Infos classe" %}</h2>
+                        <p>{% trans "Les informations principales de votre groupe." %}</p>
                     </div>
-                    <div class="empty-state">
-                        <div style="text-align: left;">
-                            <div style="margin: 0.8rem 0;"><strong>📚 Classe:</strong> {{ student.filiere.nom }}</div>
-                            <div style="margin: 0.8rem 0;"><strong>🏛️ Salle:</strong> {{ student.filiere.salle|default:"Non définie" }}</div>
-                            <div style="margin: 0.8rem 0;"><strong>🆔 Numéro:</strong> {{ student.numero_etudiant|default:"Non renseigné" }}</div>
-                            <div style="margin: 0.8rem 0;"><strong>📧 Email:</strong> {{ student.email|default:"Non renseigné" }}</div>
-                        </div>
+                    <div class="empty-state text-start">
+                        <div class="mb-2"><strong>{% trans "Classe" %}:</strong> {{ student.filiere.nom }}</div>
+                        <div class="mb-2"><strong>{% trans "Salle" %}:</strong> {{ student.filiere.salle|default:"-" }}</div>
+                        <div class="mb-2"><strong>{% trans "Numero" %}:</strong> {{ student.numero_etudiant|default:"-" }}</div>
+                        <div><strong>{% trans "Email" %}:</strong> {{ student.email|default:"-" }}</div>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="col-lg-6">
-            <div class="card">
+            <div class="card h-100">
                 <div class="card-body">
                     <div class="section-head">
-                        <h2><i class="fas fa-alert-circle"></i> Résumé Absences</h2>
-                        <p>État de vos absences</p>
+                        <h2><i class="fas fa-chart-pie"></i> {% trans "Resume absences" %}</h2>
+                        <p>{% trans "Un point simple sur votre situation actuelle." %}</p>
                     </div>
-                    <div class="empty-state">
-                        <div style="text-align: left;">
-                            <div style="margin: 0.8rem 0;"><strong>📊 Total d'absences:</strong> <span style="color: #ff8888; font-weight: bold;">{{ stats.absence_count }}</span></div>
-                            <div style="margin: 0.8rem 0;"><strong>✅ Absences justifiées:</strong> <span style="color: var(--primary); font-weight: bold;">{{ stats.justified_count }}</span></div>
-                            <div style="margin: 0.8rem 0;"><strong>⚠️ Absences non justifiées:</strong> <span style="color: #ff8888; font-weight: bold;">{{ stats.pending_absence_count }}</span></div>
-                            <div style="margin: 0.8rem 0;"><strong>% Justification:</strong> 
-                                {% if stats.absence_count > 0 %}
-                                    <span style="color: var(--primary);">{{ justified_percent|default:"0" }}%</span>
-                                {% else %}
-                                    <span style="color: var(--primary);">N/A</span>
-                                {% endif %}
-                            </div>
+                    <div class="empty-state text-start">
+                        <div class="mb-2"><strong>{% trans "Total" %}:</strong> {{ stats.absence_count }}</div>
+                        <div class="mb-2"><strong>{% trans "Justifiees" %}:</strong> {{ stats.justified_count }}</div>
+                        <div class="mb-2"><strong>{% trans "Non justifiees" %}:</strong> {{ stats.pending_absence_count }}</div>
+                        <div>
+                            <strong>{% trans "Taux" %}:</strong>
+                            {% if stats.absence_count > 0 %}
+                                {{ justified_percent|default:"0" }}%
+                            {% else %}
+                                -
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -223,49 +203,47 @@
         </div>
     </div>
 
-    <div class="card mb-5">
+    <div class="card mb-4">
         <div class="card-body">
             <div class="section-head">
-                <h2><i class="fas fa-history"></i> Mon Historique d'Attendance</h2>
-                <p>Chronologie complète de vos présences et absences</p>
+                <h2><i class="fas fa-history"></i> {% trans "Historique" %}</h2>
+                <p>{% trans "Chronologie des presences et absences." %}</p>
             </div>
-            
+
             {% if presences %}
-                <div style="position: relative; padding: 2rem 0;">
+                <div class="d-grid gap-3">
                     {% for presence in presences %}
                         <div class="timeline-item">
-                            <div class="card" style="margin-bottom: 0; border: 1px solid var(--border-color);">
-                                <div class="card-body" style="padding: 1.2rem;">
-                                    <div class="row align-items-center">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row align-items-center g-3">
                                         <div class="col-md-3">
-                                            <strong style="color: var(--primary);">{{ presence.date|date:"d/m/Y" }}</strong>
-                                            <br><small style="color: var(--text-secondary);">{{ presence.date|date:"l" }}</small>
+                                            <strong>{{ presence.date|date:"d/m/Y" }}</strong><br>
+                                            <small class="text-muted">{{ presence.date|date:"l" }}</small>
                                         </div>
                                         <div class="col-md-3">
                                             {% if presence.present %}
-                                                <span class="badge bg-success"><i class="fas fa-check"></i> Présent</span>
+                                                <span class="badge bg-success">{% trans "Present" %}</span>
                                             {% else %}
-                                                <span class="badge bg-danger"><i class="fas fa-times"></i> Absent</span>
+                                                <span class="badge bg-danger">{% trans "Absent" %}</span>
                                             {% endif %}
                                         </div>
                                         <div class="col-md-4">
                                             {% if presence.present %}
-                                                <span style="color: var(--text-secondary);">Aucune action</span>
+                                                <span class="text-muted">{% trans "Aucune action" %}</span>
                                             {% else %}
                                                 {% if presence.justification %}
-                                                    <span style="color: var(--text-secondary);">
-                                                        <strong>Statut:</strong> {{ presence.justification.get_status_display }}
-                                                    </span>
+                                                    <span class="text-muted">{{ presence.justification.get_status_display }}</span>
                                                 {% else %}
-                                                    <span style="color: #ff8888;"><strong>En attente de justification</strong></span>
+                                                    <span class="text-danger fw-semibold">{% trans "Justification en attente" %}</span>
                                                 {% endif %}
                                             {% endif %}
                                         </div>
-                                        <div class="col-md-2 text-end">
+                                        <div class="col-md-2 text-md-end">
                                             {% if not presence.present %}
                                                 <a class="btn btn-sm btn-outline-secondary" href="{% url 'justify_absence' presence.id %}">
-                                                    <i class="fas fa-{% if presence.justification %}pen{% else %}upload{% endif %}"></i>
-                                                    {% if presence.justification %}Modifier{% else %}Justifier{% endif %}
+                                                    <i class="fas fa-{% if presence.justification %}pen{% else %}upload{% endif %} me-1"></i>
+                                                    {% if presence.justification %}{% trans "Modifier" %}{% else %}{% trans "Justifier" %}{% endif %}
                                                 </a>
                                             {% endif %}
                                         </div>
@@ -277,25 +255,17 @@
                 </div>
             {% else %}
                 <div class="empty-state">
-                    <i class="fas fa-inbox" style="font-size: 3rem; margin-bottom: 1rem; display: block; opacity: 0.5;"></i>
-                    Aucune présence enregistrée pour le moment.
+                    <i class="fas fa-inbox fs-1 mb-3 d-block text-muted"></i>
+                    <p class="mb-0">{% trans "Aucune presence enregistree pour le moment." %}</p>
                 </div>
             {% endif %}
         </div>
     </div>
 
-    <!-- Quick Actions -->
-    <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
-        <a href="{% url 'student_dashboard' %}" class="btn btn-outline-secondary">
-            <i class="fas fa-sync me-2"></i>Rafraîchir
-        </a>
-        <a href="{% url 'monthly_report' %}" class="btn btn-outline-secondary">
-            <i class="fas fa-chart-bar me-2"></i>Voir les Rapports
-        </a>
-        <a href="{% url 'user_profile' %}" class="btn btn-outline-secondary">
-            <i class="fas fa-user me-2"></i>Mon Profil
-        </a>
-        <a href="{% url 'logout' %}" class="btn btn-light">
-            <i class="fas fa-sign-out-alt me-2"></i>Déconnexion
-        </a>
+    <div class="d-flex flex-wrap gap-2 justify-content-center">
+        <a href="{% url 'student_dashboard' %}" class="btn btn-outline-secondary"><i class="fas fa-rotate-right me-1"></i>{% trans "Actualiser" %}</a>
+        <a href="{% url 'monthly_report' %}" class="btn btn-outline-secondary"><i class="fas fa-chart-line me-1"></i>{% trans "Rapports" %}</a>
+        <a href="{% url 'user_profile' %}" class="btn btn-outline-secondary"><i class="fas fa-user me-1"></i>{% trans "Profil" %}</a>
+        <a href="{% url 'logout' %}" class="btn btn-light"><i class="fas fa-sign-out-alt me-1"></i>{% trans "Deconnexion" %}</a>
     </div>
+{% endblock %}

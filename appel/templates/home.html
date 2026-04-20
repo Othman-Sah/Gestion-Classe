@@ -5,266 +5,192 @@
 {% block title %}Tableau de bord{% endblock %}
 
 {% block content %}
-    <section class="hero-section mb-5">
-        <div class="row align-items-stretch">
+    <section class="hero-section mb-4">
+        <div class="row align-items-center g-4">
             <div class="col-lg-8">
-                <span class="eyebrow d-block">👨‍🏫 Studio Enseignant</span>
-                <div class="d-flex align-items-center gap-3 mt-2 mb-3">
-                    <span class="pill" style="background: linear-gradient(135deg, rgba(0, 255, 136, 0.2) 0%, rgba(0, 212, 255, 0.2) 100%); border: 1px solid rgba(0, 255, 136, 0.3);">
-                        <i class="fas fa-calendar-alt me-1"></i> {{ today|date:"d/m/Y" }}
-                    </span>
-                    <span class="pill" style="background: linear-gradient(135deg, rgba(255, 193, 7, 0.2) 0%, rgba(255, 152, 0, 0.2) 100%); border: 1px solid rgba(255, 193, 7, 0.3);">
-                        <i class="fas fa-clock me-1"></i> {% now "H:i" %}
-                    </span>
+                <span class="eyebrow"><i class="fas fa-chalkboard-teacher"></i> {% trans "Tableau enseignant" %}</span>
+                <h1>{% trans "Tableau de bord" %}</h1>
+                <p>
+                    {% trans "Suivez les presences, ouvrez une classe, gerez les justifications et gardez une vue claire sur vos groupes en quelques gestes." %}
+                </p>
+                <div class="d-flex flex-wrap gap-2 mt-3">
+                    <span class="pill"><i class="fas fa-calendar-day"></i> {{ today|date:"d/m/Y" }}</span>
+                    <span class="pill"><i class="fas fa-clock"></i> {% now "H:i" %}</span>
+                    <span class="pill"><i class="fas fa-graduation-cap"></i> {{ stats.filiere_count }} {% trans "classe(s)" %}</span>
                 </div>
-                <h1 class="mt-4" style="font-size: 3rem; font-weight: 800; background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Tableau de Bord Enseignant</h1>
-                <p style="font-size: 1.1rem; line-height: 1.8; margin-top: 1rem;">Gérez vos classes en temps réel. Lancez l'appel, suivez les présences et approuvez les justifications d'absence en un clic.</p>
             </div>
-            <aside class="col-lg-4 d-flex flex-column justify-content-center" style="text-align: right;">
-                <div style="font-size: 3.5rem; opacity: 0.7; margin-bottom: 1rem;">📚</div>
-                <small style="color: var(--text-secondary); display: block; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">Vos Classes</small>
-                <div style="font-size: 2.5rem; color: var(--primary-color); font-weight: 700;">{{ stats.filiere_count }}</div>
-            </aside>
+            <div class="col-lg-4">
+                <div class="spotlight h-100">
+                    <span class="eyebrow"><i class="fas fa-chart-pie"></i> {% trans "Vue rapide" %}</span>
+                    <ul class="mb-0">
+                        <li>{% trans "Classes actives" %}: <strong>{{ stats.filiere_count }}</strong></li>
+                        <li>{% trans "Etudiants inscrits" %}: <strong>{{ stats.student_count }}</strong></li>
+                        <li>{% trans "Appels aujourd'hui" %}: <strong>{{ stats.attendance_count_today }}</strong></li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </section>
 
-    <!-- Enhanced Stats Overview -->
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 mb-5">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 g-4 mb-4">
         <div class="col">
-            <div class="stats-card" style="border: 2px solid rgba(0, 255, 136, 0.2); background: linear-gradient(135deg, rgba(0, 255, 136, 0.05) 0%, transparent 100%);">
-                <p class="stats-label"><i class="fas fa-door-open" style="color: var(--primary-color);"></i> Classes</p>
-                <div class="stats-number" style="color: var(--primary-color); font-size: 3rem;">{{ stats.filiere_count }}</div>
-                <small style="color: var(--text-secondary);">Groupes actifs</small>
+            <div class="stats-card">
+                <p class="stats-label"><i class="fas fa-door-open"></i> {% trans "Classes" %}</p>
+                <div class="stats-number">{{ stats.filiere_count }}</div>
+                <small>{% trans "groupes actifs" %}</small>
             </div>
         </div>
         <div class="col">
-            <div class="stats-card" style="border: 2px solid rgba(0, 212, 255, 0.2); background: linear-gradient(135deg, rgba(0, 212, 255, 0.05) 0%, transparent 100%);">
-                <p class="stats-label"><i class="fas fa-user-graduate" style="color: #00d4ff;"></i> Étudiants</p>
-                <div class="stats-number" style="color: #00d4ff; font-size: 3rem;">{{ stats.student_count }}</div>
-                <small style="color: var(--text-secondary);">Total inscrit</small>
+            <div class="stats-card">
+                <p class="stats-label"><i class="fas fa-user-graduate"></i> {% trans "Etudiants" %}</p>
+                <div class="stats-number">{{ stats.student_count }}</div>
+                <small>{% trans "total inscrit" %}</small>
             </div>
         </div>
         <div class="col">
-            <div class="stats-card" style="border: 2px solid rgba(76, 175, 80, 0.2); background: linear-gradient(135deg, rgba(76, 175, 80, 0.05) 0%, transparent 100%);">
-                <p class="stats-label"><i class="fas fa-check-double" style="color: #4caf50;"></i> Appels</p>
-                <div class="stats-number" style="color: #4caf50; font-size: 3rem;">{{ stats.attendance_count_today }}</div>
-                <small style="color: var(--text-secondary);">D'aujourd'hui</small>
+            <div class="stats-card">
+                <p class="stats-label"><i class="fas fa-clipboard-check"></i> {% trans "Appels" %}</p>
+                <div class="stats-number">{{ stats.attendance_count_today }}</div>
+                <small>{% trans "saisis aujourd'hui" %}</small>
             </div>
         </div>
         <div class="col">
-            <div class="stats-card" style="border: 2px solid rgba(255, 193, 7, 0.2); background: linear-gradient(135deg, rgba(255, 193, 7, 0.05) 0%, transparent 100%);">
-                <p class="stats-label"><i class="fas fa-percentage" style="color: #ffc107;"></i> Taux</p>
-                <div class="stats-number" style="color: #ffc107; font-size: 3rem;">{% if stats.student_count > 0 %}{{ attendance_rate|default:"0" }}%{% else %}N/A{% endif %}</div>
-                <small style="color: var(--text-secondary);">Présences</small>
+            <div class="stats-card">
+                <p class="stats-label"><i class="fas fa-percentage"></i> {% trans "Taux" %}</p>
+                <div class="stats-number">
+                    {% if stats.student_count > 0 %}
+                        {{ attendance_rate|default:"0" }}%
+                    {% else %}
+                        -
+                    {% endif %}
+                </div>
+                <small>{% trans "presence moyenne" %}</small>
             </div>
         </div>
     </div>
 
-    <!-- Create Class & Your Classes Section -->
-    <div class="row g-4 mb-5">
-        <!-- Créer une classe -->
+    <div class="row g-4 mb-4">
         <div class="col-lg-6">
-            <div class="card" style="
-                border: 2px solid rgba(0, 255, 136, 0.2);
-                background: linear-gradient(135deg, rgba(0, 255, 136, 0.05) 0%, transparent 100%);
-                transition: all 0.3s ease;
-            " onmouseover="this.style.boxShadow='0 8px 25px rgba(0, 255, 136, 0.1)'" onmouseout="this.style.boxShadow='none'">
+            <div class="card h-100">
                 <div class="card-body">
-                    <div class="section-head mb-4">
-                        <h2 style="color: var(--text-color);"><i class="fas fa-plus-circle me-2" style="color: var(--primary-color);"></i> Créer une Classe</h2>
-                        <p style="margin-bottom: 0; color: var(--text-secondary);">Ajoutez un nouveau groupe à gérer</p>
+                    <div class="section-head">
+                        <h2><i class="fas fa-plus-circle"></i> {% trans "Creer une classe" %}</h2>
+                        <p>{% trans "Ajoutez un nouveau groupe a votre liste de suivi." %}</p>
                     </div>
-                    <form method="post">
+                    <form method="post" class="d-grid gap-3">
                         {% csrf_token %}
-                        <div class="form-group mb-3">
-                            {{ filiere_form.as_p }}
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100" style="font-weight: 600; padding: 0.8rem; background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%); border: none;">
-                            <i class="fas fa-plus-circle me-2"></i>Créer la classe
+                        {{ filiere_form.as_p }}
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-plus me-2"></i>{% trans "Creer la classe" %}
                         </button>
                     </form>
                 </div>
             </div>
         </div>
 
-        <!-- Vos classes -->
         <div class="col-lg-6">
-            <div class="card" style="
-                border: 2px solid rgba(0, 212, 255, 0.2);
-                background: linear-gradient(135deg, rgba(0, 212, 255, 0.05) 0%, transparent 100%);
-                transition: all 0.3s ease;
-            " onmouseover="this.style.boxShadow='0 8px 25px rgba(0, 212, 255, 0.1)'" onmouseout="this.style.boxShadow='none'">
+            <div class="card h-100">
                 <div class="card-body">
-                    <div class="section-head mb-4">
-                        <h2 style="color: var(--text-color);"><i class="fas fa-list-ul me-2" style="color: #00d4ff;"></i> Vos Classes</h2>
-                        <p style="margin-bottom: 0; color: var(--text-secondary);">Accédez à la gestion complète</p>
+                    <div class="section-head">
+                        <h2><i class="fas fa-bolt"></i> {% trans "Actions rapides" %}</h2>
+                        <p>{% trans "Gardez les gestes essentiels sous la main." %}</p>
                     </div>
-                    {% if filieres %}
-                        <div class="table-responsive">
-                            <table class="table table-hover mb-0" style="border-collapse: collapse;">
-                                <thead style="background: rgba(0, 255, 136, 0.05); border-bottom: 2px solid rgba(0, 255, 136, 0.2);">
-                                    <tr>
-                                        <th style="color: var(--primary-color); font-weight: 700;"><i class="fas fa-book me-1"></i> Classe</th>
-                                        <th style="color: var(--primary-color); font-weight: 700;"><i class="fas fa-door-open me-1"></i> Salle</th>
-                                        <th style="color: var(--primary-color); font-weight: 700;"><i class="fas fa-users me-1"></i> Étu.</th>
-                                        <th style="color: var(--primary-color); font-weight: 700;"><i class="fas fa-check me-1"></i> Prés.</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for filiere in filieres %}
-                                        <tr style="border-bottom: 1px solid rgba(0, 255, 136, 0.1); transition: background 0.2s;" onmouseover="this.style.background='rgba(0, 255, 136, 0.08)'" onmouseout="this.style.background='transparent'">
-                                            <td><strong style="color: var(--primary-color);">{{ filiere.nom }}</strong></td>
-                                            <td style="color: var(--text-secondary);">{{ filiere.salle|default:"-" }}</td>
-                                            <td style="font-weight: 600; color: #00d4ff;">{{ filiere.student_count }}</td>
-                                            <td><span class="pill" style="background: rgba(76, 175, 80, 0.15); color: #4caf50; border: 1px solid rgba(76, 175, 80, 0.3); font-weight: 600;">{{ filiere.present_count }}/{{ filiere.student_count }}</span></td>
-                                            <td><a class="btn btn-sm btn-outline-primary" href="{% url 'class_detail' filiere.id %}" style="border-color: var(--primary-color); color: var(--primary-color); font-weight: 600;"><i class="fas fa-arrow-right me-1"></i> Ouvrir</a></td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    {% else %}
-                        <div style="
-                            text-align: center;
-                            padding: 3rem 2rem;
-                            background: rgba(0, 255, 136, 0.05);
-                            border: 2px dashed rgba(0, 255, 136, 0.2);
-                            border-radius: 8px;
-                        ">
-                            <i class="fas fa-inbox" style="font-size: 2.5rem; margin-bottom: 1rem; display: block; opacity: 0.5; color: var(--primary-color);"></i>
-                            <p style="color: var(--text-secondary); margin-bottom: 0;">Aucune classe pour le moment. Créez votre première classe pour commencer.</p>
-                        </div>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Quick Actions & Reports -->
-    <div class="row g-4 mb-5">
-        <div class="col-lg-6">
-            <div class="card" style="
-                border: 2px solid rgba(76, 175, 80, 0.2);
-                background: linear-gradient(135deg, rgba(76, 175, 80, 0.05) 0%, transparent 100%);
-                transition: all 0.3s ease;
-            " onmouseover="this.style.boxShadow='0 8px 25px rgba(76, 175, 80, 0.1)'" onmouseout="this.style.boxShadow='none'">
-                <div class="card-body">
-                    <div class="section-head mb-4">
-                        <h2 style="color: var(--text-color);"><i class="fas fa-lightning-bolt me-2" style="color: #4caf50;"></i> Actions Rapides</h2>
-                        <p style="margin-bottom: 0; color: var(--text-secondary);">Accédez aux fonctions principales</p>
-                    </div>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.8rem;">
-                        <a href="{% url 'dashboard' %}" class="quick-action" style="background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(76, 175, 80, 0.05) 100%); border: 1px solid rgba(76, 175, 80, 0.3); color: #4caf50;">
-                            <i class="fas fa-redo"></i> Rafraîchir
+                    <div class="d-flex flex-wrap gap-2">
+                        <a class="quick-action" href="{% url 'dashboard' %}"><i class="fas fa-rotate-right"></i> {% trans "Actualiser" %}</a>
+                        <a class="quick-action" href="{% url 'manage_justifications' %}">
+                            <i class="fas fa-clipboard-check"></i> {% trans "Justifications" %} ({{ stats.pending_justifications_count }})
                         </a>
-                        <a href="{% url 'manage_justifications' %}" class="quick-action" style="background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 193, 7, 0.05) 100%); border: 1px solid rgba(255, 193, 7, 0.3); color: #ffc107;">
-                            <i class="fas fa-clipboard-check"></i> Justifications <strong>({{ stats.pending_justifications_count }})</strong>
-                        </a>
-                        <a href="{% url 'monthly_report' %}" class="quick-action" style="background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 212, 255, 0.05) 100%); border: 1px solid rgba(0, 212, 255, 0.3); color: #00d4ff;">
-                            <i class="fas fa-chart-bar"></i> Rapports
-                        </a>
+                        <a class="quick-action" href="{% url 'monthly_report' %}"><i class="fas fa-chart-line"></i> {% trans "Rapports" %}</a>
                         {% if filieres %}
-                            <a href="{% url 'class_detail' filieres.0.id %}" class="quick-action" style="background: linear-gradient(135deg, rgba(0, 255, 136, 0.1) 0%, rgba(0, 255, 136, 0.05) 100%); border: 1px solid rgba(0, 255, 136, 0.3); color: var(--primary-color);">
-                                <i class="fas fa-pencil"></i> Appel
-                            </a>
+                            <a class="quick-action" href="{% url 'class_detail' filieres.0.id %}"><i class="fas fa-pencil-alt"></i> {% trans "Faire l'appel" %}</a>
                         {% endif %}
-                        <a href="{% url 'logout' %}" class="quick-action" style="margin-left: auto; background: linear-gradient(135deg, rgba(220, 53, 69, 0.1) 0%, rgba(220, 53, 69, 0.05) 100%); border: 1px solid rgba(220, 53, 69, 0.3); color: #dc3545;">
-                            <i class="fas fa-sign-out-alt"></i> Déconnexion
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-6">
-            <div class="card" style="
-                border: 2px solid rgba(255, 152, 0, 0.2);
-                background: linear-gradient(135deg, rgba(255, 152, 0, 0.05) 0%, transparent 100%);
-                transition: all 0.3s ease;
-            " onmouseover="this.style.boxShadow='0 8px 25px rgba(255, 152, 0, 0.1)'" onmouseout="this.style.boxShadow='none'">
-                <div class="card-body">
-                    <div class="section-head mb-4">
-                        <h2 style="color: var(--text-color);"><i class="fas fa-file-pdf me-2" style="color: #ff9800;"></i> Rapports & Exports</h2>
-                        <p style="margin-bottom: 0; color: var(--text-secondary);">Générez les documents mensuels</p>
-                    </div>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.8rem;">
-                        <a href="{% url 'monthly_report' %}" class="quick-action" style="background: linear-gradient(135deg, rgba(255, 152, 0, 0.1) 0%, rgba(255, 152, 0, 0.05) 100%); border: 1px solid rgba(255, 152, 0, 0.3); color: #ff9800;">
-                            <i class="fas fa-file-pdf"></i> Rapport Mensuel
-                        </a>
-                        {% if filieres %}
-                            {% for filiere in filieres|slice:":1" %}
-                                <a href="{% url 'generate_monthly_report' filiere.id %}" class="quick-action" style="background: linear-gradient(135deg, rgba(33, 150, 243, 0.1) 0%, rgba(33, 150, 243, 0.05) 100%); border: 1px solid rgba(33, 150, 243, 0.3); color: #2196f3;">
-                                    <i class="fas fa-download"></i> Export PDF
-                                </a>
-                            {% endfor %}
-                        {% endif %}
-                        <a href="{% url 'dashboard' %}" class="quick-action" style="background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(76, 175, 80, 0.05) 100%); border: 1px solid rgba(76, 175, 80, 0.3); color: #4caf50;">
-                            <i class="fas fa-sync"></i> Statistiques
-                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Performance Overview -->
-    {% if filieres %}
-        <div class="card" style="
-            border: 2px solid rgba(220, 53, 69, 0.2);
-            background: linear-gradient(135deg, rgba(220, 53, 69, 0.05) 0%, transparent 100%);
-            transition: all 0.3s ease;
-        " onmouseover="this.style.boxShadow='0 8px 25px rgba(220, 53, 69, 0.1)'" onmouseout="this.style.boxShadow='none'">
-            <div class="card-body">
-                <div class="section-head mb-4">
-                    <h2 style="color: var(--text-color);"><i class="fas fa-chart-pie me-2" style="color: #dc3545;"></i> Vue d'ensemble des Performances</h2>
-                    <p style="margin-bottom: 0; color: var(--text-secondary);">Analyse rapide de chaque classe</p>
-                </div>
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="section-head">
+                <h2><i class="fas fa-list"></i> {% trans "Vos classes" %}</h2>
+                <p>{% trans "Accedez a la gestion complete de chaque groupe." %}</p>
+            </div>
+            {% if filieres %}
                 <div class="table-responsive">
-                    <table class="table mb-0" style="border-collapse: collapse;">
-                        <thead style="background: rgba(220, 53, 69, 0.05); border-bottom: 2px solid rgba(220, 53, 69, 0.2);">
+                    <table class="table align-middle">
+                        <thead>
                             <tr>
-                                <th style="color: #dc3545; font-weight: 700;"><i class="fas fa-book me-1"></i> Classe</th>
-                                <th style="color: #dc3545; font-weight: 700;"><i class="fas fa-users me-1"></i> Effectif</th>
-                                <th style="color: #4caf50; font-weight: 700;"><i class="fas fa-check-double me-1"></i> Présentes</th>
-                                <th style="color: #dc3545; font-weight: 700;"><i class="fas fa-times-circle me-1"></i> Absentes</th>
-                                <th style="color: #ffc107; font-weight: 700;"><i class="fas fa-percentage me-1"></i> Taux</th>
-                                <th></th>
+                                <th>{% trans "Classe" %}</th>
+                                <th>{% trans "Salle" %}</th>
+                                <th>{% trans "Etudiants" %}</th>
+                                <th>{% trans "Presence" %}</th>
+                                <th class="text-end"></th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for filiere in filieres %}
-                                {% with rate=filiere.present_count|add:0 %}
-                                    <tr style="border-bottom: 1px solid rgba(220, 53, 69, 0.1); transition: background 0.2s;" onmouseover="this.style.background='rgba(220, 53, 69, 0.08)'" onmouseout="this.style.background='transparent'">
-                                        <td><strong style="color: var(--text-color);">{{ filiere.nom }}</strong></td>
-                                        <td style="font-weight: 600; color: #00d4ff;">{{ filiere.student_count }}</td>
-                                        <td style="font-weight: 700; color: #4caf50;">{{ filiere.present_count }}</td>
-                                        <td style="font-weight: 700; color: #dc3545;">{{ filiere.absent_count|default:0 }}</td>
-                                        <td>
-                                            {% if filiere.student_count > 0 %}
-                                                <span style="
-                                                    color: #ffc107;
-                                                    font-weight: 700;
-                                                    padding: 0.4rem 0.8rem;
-                                                    background: rgba(255, 193, 7, 0.1);
-                                                    border-radius: 4px;
-                                                    display: inline-block;
-                                                    min-width: 50px;
-                                                    text-align: center;
-                                                ">
-                                                    {{ filiere.present_count|add:0|mul:100|div:filiere.student_count|floatformat:0 }}%
-                                                </span>
-                                            {% else %}
-                                                <span style="color: var(--text-secondary);">-</span>
-                                            {% endif %}
-                                        </td>
-                                        <td>
-                                            <a class="btn btn-sm btn-outline-danger" href="{% url 'class_detail' filiere.id %}" style="border-color: #dc3545; color: #dc3545; font-weight: 600;">
-                                                <i class="fas fa-eye me-1"></i> Détail
-                                            </a>
-                                        </td>
-                                    </tr>
-                                {% endwith %}
+                                <tr>
+                                    <td><strong>{{ filiere.nom }}</strong></td>
+                                    <td>{{ filiere.salle|default:"-" }}</td>
+                                    <td>{{ filiere.student_count }}</td>
+                                    <td>
+                                        <span class="pill">
+                                            {{ filiere.present_count }}/{{ filiere.student_count }}
+                                        </span>
+                                    </td>
+                                    <td class="text-end">
+                                        <a class="btn btn-sm btn-outline-secondary" href="{% url 'class_detail' filiere.id %}">
+                                            <i class="fas fa-arrow-right me-1"></i>{% trans "Ouvrir" %}
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-inbox fs-1 mb-3 d-block text-muted"></i>
+                    <p class="mb-0">{% trans "Aucune classe pour le moment. Creez votre premiere classe pour commencer." %}</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if filieres %}
+        <div class="card">
+            <div class="card-body">
+                <div class="section-head">
+                    <h2><i class="fas fa-chart-bar"></i> {% trans "Vue d'ensemble" %}</h2>
+                    <p>{% trans "Comparez rapidement la taille et la presence de chaque classe." %}</p>
+                </div>
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <thead>
+                            <tr>
+                                <th>{% trans "Classe" %}</th>
+                                <th>{% trans "Effectif" %}</th>
+                                <th>{% trans "Present(s)" %}</th>
+                                <th>{% trans "Absent(s)" %}</th>
+                                <th>{% trans "Taux" %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for filiere in filieres %}
+                                <tr>
+                                    <td><strong>{{ filiere.nom }}</strong></td>
+                                    <td>{{ filiere.student_count }}</td>
+                                    <td>{{ filiere.present_count }}</td>
+                                    <td>{{ filiere.absent_count|default:0 }}</td>
+                                    <td>
+                                        {% if filiere.student_count > 0 %}
+                                            {{ filiere.present_count|add:0|mul:100|div:filiere.student_count|floatformat:0 }}%
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
+                                </tr>
                             {% endfor %}
                         </tbody>
                     </table>

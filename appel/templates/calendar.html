@@ -1,357 +1,134 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load i18n %}
 
 {% block title %}{% trans "Emploi du temps" %}{% endblock %}
 
 {% block content %}
-<style>
-    .calendar-shell {
-        display: grid;
-        gap: 1.5rem;
-    }
-
-    .calendar-hero,
-    .calendar-section,
-    .calendar-empty {
-        border-radius: 20px;
-        border: 1px solid rgba(0, 255, 136, 0.16);
-        background: rgba(15, 21, 32, 0.78);
-        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.26);
-        backdrop-filter: blur(12px);
-    }
-
-    .calendar-hero {
-        padding: 2rem;
-        background:
-            radial-gradient(circle at top right, rgba(0, 212, 255, 0.14), transparent 32%),
-            radial-gradient(circle at bottom left, rgba(255, 184, 0, 0.12), transparent 28%),
-            rgba(15, 21, 32, 0.9);
-    }
-
-    .calendar-kicker,
-    .calendar-chip,
-    .session-pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        border-radius: 999px;
-        font-weight: 700;
-    }
-
-    .calendar-kicker {
-        margin-bottom: 1rem;
-        padding: 0.5rem 0.85rem;
-        background: rgba(0, 255, 136, 0.1);
-        color: var(--primary);
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        font-size: 0.78rem;
-    }
-
-    .calendar-title {
-        margin: 0;
-        font-size: clamp(2rem, 4vw, 3rem);
-        font-weight: 900;
-    }
-
-    .calendar-subtitle {
-        max-width: 72ch;
-        margin: 0.9rem 0 0;
-        color: var(--text-secondary);
-        line-height: 1.7;
-    }
-
-    .calendar-meta {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.75rem;
-        margin-top: 1.25rem;
-    }
-
-    .calendar-chip {
-        padding: 0.65rem 0.95rem;
-        background: rgba(255, 255, 255, 0.05);
-        color: var(--text-primary);
-    }
-
-    .calendar-section {
-        overflow: hidden;
-    }
-
-    .calendar-section-head {
-        display: flex;
-        justify-content: space-between;
-        gap: 1rem;
-        padding: 1.5rem 1.5rem 0;
-    }
-
-    .calendar-section-head h2,
-    .calendar-section-head h3 {
-        margin: 0;
-    }
-
-    .calendar-section-head p {
-        margin: 0.4rem 0 0;
-        color: var(--text-secondary);
-    }
-
-    .calendar-summary {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 1rem;
-        padding: 1.5rem;
-    }
-
-    .summary-card {
-        padding: 1rem;
-        border-radius: 16px;
-        background: rgba(255, 255, 255, 0.04);
-        border: 1px solid rgba(255, 255, 255, 0.06);
-    }
-
-    .summary-label {
-        display: block;
-        color: var(--text-secondary);
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        font-size: 0.72rem;
-        font-weight: 800;
-    }
-
-    .summary-value {
-        margin-top: 0.5rem;
-        font-size: 1.7rem;
-        font-weight: 900;
-    }
-
-    .summary-note {
-        margin-top: 0.35rem;
-        color: var(--text-secondary);
-        font-size: 0.92rem;
-    }
-
-    .calendar-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 1rem;
-        padding: 0 1.5rem 1.5rem;
-    }
-
-    .day-card {
-        padding: 1rem;
-        border-radius: 16px;
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .day-head {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 0.75rem;
-        margin-bottom: 1rem;
-    }
-
-    .day-count {
-        min-width: 2rem;
-        padding: 0.35rem 0.65rem;
-        border-radius: 999px;
-        background: rgba(0, 255, 136, 0.12);
-        color: var(--primary);
-        text-align: center;
-        font-weight: 800;
-    }
-
-    .session-list {
-        display: grid;
-        gap: 0.75rem;
-    }
-
-    .session-item {
-        padding: 0.95rem;
-        border-radius: 14px;
-        background: rgba(8, 12, 20, 0.62);
-        border: 1px solid rgba(255, 255, 255, 0.06);
-    }
-
-    .session-title {
-        margin: 0.7rem 0 0;
-        font-size: 1rem;
-        font-weight: 800;
-    }
-
-    .session-meta {
-        display: grid;
-        gap: 0.45rem;
-        margin-top: 0.8rem;
-        color: var(--text-secondary);
-        font-size: 0.92rem;
-    }
-
-    .session-pill {
-        padding: 0.35rem 0.65rem;
-        background: rgba(0, 212, 255, 0.12);
-        color: #7ee6ff;
-        font-size: 0.8rem;
-    }
-
-    .calendar-empty {
-        padding: 2.5rem 1.5rem;
-        text-align: center;
-    }
-
-    .calendar-empty p {
-        max-width: 56ch;
-        margin: 0.75rem auto 0;
-        color: var(--text-secondary);
-    }
-
-    @media (max-width: 767.98px) {
-        .calendar-hero,
-        .calendar-section-head,
-        .calendar-summary,
-        .calendar-grid {
-            padding-left: 1rem;
-            padding-right: 1rem;
-        }
-
-        .calendar-hero {
-            padding-top: 1.5rem;
-            padding-bottom: 1.5rem;
-        }
-
-        .calendar-section-head {
-            padding-top: 1rem;
-        }
-    }
-</style>
-
-<div class="calendar-shell">
-    <section class="calendar-hero">
-        <span class="calendar-kicker">
-            <i class="fas fa-calendar-week"></i>
-            {% if student %}
-                {% trans "Vue etudiante" %}
-            {% else %}
-                {% trans "Vue classes" %}
-            {% endif %}
-        </span>
-        <h1 class="calendar-title">{% trans "Emploi du temps" %}</h1>
-        <p class="calendar-subtitle">
-            {% if student %}
-                {% trans "Consultez vos seances dans le bon ordre de la semaine, avec un resume utile pour savoir ce qui arrive ensuite." %}
-            {% else %}
-                {% trans "Consultez rapidement les emplois du temps de chaque classe avec une vue plus claire pour l'administration et les enseignants." %}
-            {% endif %}
-        </p>
-        <div class="calendar-meta">
-            <span class="calendar-chip">
-                <i class="fas fa-arrow-up-right-dots"></i>
-                {% trans "Ordre hebdomadaire corrige" %}
-            </span>
-            <span class="calendar-chip">
-                <i class="fas fa-clock"></i>
-                {% trans "Prochaine seance mise en avant" %}
-            </span>
-            <span class="calendar-chip">
-                <i class="fas fa-mobile-screen"></i>
-                {% trans "Lecture simple sur mobile" %}
-            </span>
+    <section class="hero-section mb-4">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-8">
+                <span class="eyebrow"><i class="fas fa-calendar-week"></i> {% trans "Scolarite" %}</span>
+                <h1>{% trans "Emploi du temps" %}</h1>
+                <p>
+                    {% if student %}
+                        {% trans "Consultez vos seances classees par jour pour suivre votre semaine." %}
+                    {% else %}
+                        {% trans "Consultez les seances planifiees pour chaque classe." %}
+                    {% endif %}
+                </p>
+            </div>
+            <div class="col-lg-4">
+                <div class="spotlight h-100">
+                    <span class="eyebrow"><i class="fas fa-list-check"></i> {% trans "Resume" %}</span>
+                    <ul class="mb-0">
+                        <li>{% trans "Classes affichees" %}: <strong>{{ calendar_sections|length }}</strong></li>
+                        <li>{% trans "Planning disponible" %}: <strong>{% if has_any_schedule %}{% trans "Oui" %}{% else %}{% trans "Non" %}{% endif %}</strong></li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </section>
 
     {% if has_any_schedule %}
-        {% for section in calendar_sections %}
-            {% if section.total_sessions %}
-                <section class="calendar-section">
-                    <div class="calendar-section-head">
-                        <div>
-                            <h2>{{ section.filiere.nom }}</h2>
-                            <p>
-                                {% if student %}
-                                    {% trans "Votre semaine de cours est resumee ci-dessous." %}
-                                {% else %}
-                                    {% trans "Resume hebdomadaire de cette classe." %}
-                                {% endif %}
-                            </p>
-                        </div>
-                    </div>
+        <div class="d-grid gap-4">
+            {% for section in calendar_sections %}
+                {% if section.total_sessions %}
+                    <section class="card">
+                        <div class="card-body">
+                            <div class="section-head">
+                                <h2><i class="fas fa-school"></i> {{ section.filiere.nom }}</h2>
+                                <p>{% trans "Organisation hebdomadaire de la classe." %}</p>
+                            </div>
 
-                    <div class="calendar-summary">
-                        <div class="summary-card">
-                            <span class="summary-label">{% trans "Cours planifies" %}</span>
-                            <div class="summary-value">{{ section.total_sessions }}</div>
-                            <div class="summary-note">{% trans "sur toute la semaine" %}</div>
-                        </div>
-                        <div class="summary-card">
-                            <span class="summary-label">{% trans "Jours occupes" %}</span>
-                            <div class="summary-value">{{ section.occupied_days }}</div>
-                            <div class="summary-note">{% trans "avec au moins une seance" %}</div>
-                        </div>
-                        <div class="summary-card">
-                            <span class="summary-label">{% trans "Aujourd'hui" %}</span>
-                            <div class="summary-value">{{ section.today_session_count }}</div>
-                            <div class="summary-note">{% trans "seance(s) restantes ou prevues" %}</div>
-                        </div>
-                        <div class="summary-card">
-                            <span class="summary-label">{% trans "Prochaine seance" %}</span>
-                            {% if section.next_session %}
-                                <div class="summary-value">{{ section.next_session.start_time|time:"H:i" }}</div>
-                                <div class="summary-note">
-                                    {{ section.next_session.get_day_of_week_display }} - {{ section.next_session.subject }}
+                            <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 g-4 mb-4">
+                                <div class="col">
+                                    <div class="stats-card">
+                                        <p class="stats-label"><i class="fas fa-book-open"></i> {% trans "Seances" %}</p>
+                                        <div class="stats-number">{{ section.total_sessions }}</div>
+                                        <small>{% trans "dans la semaine" %}</small>
+                                    </div>
                                 </div>
-                            {% else %}
-                                <div class="summary-value">-</div>
-                                <div class="summary-note">{% trans "Aucune autre seance cette semaine" %}</div>
-                            {% endif %}
-                        </div>
-                    </div>
+                                <div class="col">
+                                    <div class="stats-card">
+                                        <p class="stats-label"><i class="fas fa-calendar-day"></i> {% trans "Jours" %}</p>
+                                        <div class="stats-number">{{ section.occupied_days }}</div>
+                                        <small>{% trans "occupes" %}</small>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="stats-card">
+                                        <p class="stats-label"><i class="fas fa-clock"></i> {% trans "Aujourd'hui" %}</p>
+                                        <div class="stats-number">{{ section.today_session_count }}</div>
+                                        <small>{% trans "seance(s)" %}</small>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="stats-card">
+                                        <p class="stats-label"><i class="fas fa-forward"></i> {% trans "Prochaine" %}</p>
+                                        {% if section.next_session %}
+                                            <div class="stats-number">{{ section.next_session.start_time|time:"H:i" }}</div>
+                                            <small>{{ section.next_session.get_day_of_week_display }}</small>
+                                        {% else %}
+                                            <div class="stats-number">-</div>
+                                            <small>{% trans "aucune seance" %}</small>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
 
-                    <div class="calendar-grid">
-                        {% for day in section.grouped_days %}
-                            <article class="day-card">
-                                <div class="day-head">
-                                    <h3>{{ day.label }}</h3>
-                                    <span class="day-count">{{ day.count }}</span>
-                                </div>
-                                <div class="session-list">
-                                    {% for class_item in day.items %}
-                                        <div class="session-item">
-                                            <span class="session-pill">
-                                                <i class="fas fa-clock"></i>
-                                                {{ class_item.start_time|time:"H:i" }} - {{ class_item.end_time|time:"H:i" }}
-                                            </span>
-                                            <p class="session-title">{{ class_item.subject }}</p>
-                                            <div class="session-meta">
-                                                <span>
-                                                    <i class="fas fa-chalkboard-teacher me-2 text-primary"></i>
-                                                    {% if class_item.professor %}{{ class_item.professor }}{% else %}{% trans "Professeur non renseigne" %}{% endif %}
-                                                </span>
-                                                <span>
-                                                    <i class="fas fa-location-dot me-2 text-primary"></i>
-                                                    {% if class_item.room %}{{ class_item.room }}{% else %}{% trans "Salle non renseignee" %}{% endif %}
-                                                </span>
+                            <div class="row g-3">
+                                {% for day in section.grouped_days %}
+                                    <div class="col-lg-6 col-xl-4">
+                                        <article class="card h-100">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                                    <h3 class="h5 mb-0">{{ day.label }}</h3>
+                                                    <span class="pill">{{ day.count }}</span>
+                                                </div>
+                                                <div class="d-grid gap-3">
+                                                    {% for class_item in day.items %}
+                                                        <div class="empty-state text-start py-3">
+                                                            <span class="pill mb-2">
+                                                                <i class="fas fa-clock"></i>
+                                                                {{ class_item.start_time|time:"H:i" }} - {{ class_item.end_time|time:"H:i" }}
+                                                            </span>
+                                                            <p class="fw-semibold mb-2">{{ class_item.subject }}</p>
+                                                            <p class="mb-1 text-muted">
+                                                                <i class="fas fa-chalkboard-teacher me-1"></i>
+                                                                {{ class_item.professor|default:"Professeur non renseigne" }}
+                                                            </p>
+                                                            <p class="mb-0 text-muted">
+                                                                <i class="fas fa-location-dot me-1"></i>
+                                                                {{ class_item.room|default:"Salle non renseignee" }}
+                                                            </p>
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
                                             </div>
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                            </article>
-                        {% endfor %}
-                    </div>
-                </section>
-            {% endif %}
-        {% endfor %}
-    {% else %}
-        <section class="calendar-empty">
-            <h2>{% trans "Aucun planning disponible" %}</h2>
-            <p>
-                {% if student %}
-                    {% trans "Votre filiere n'a pas encore de seances enregistrees. Des qu'un planning sera publie, il apparaitra ici." %}
-                {% else %}
-                    {% trans "Aucune classe ne dispose encore d'un emploi du temps. Ajoutez des seances pour commencer a organiser la semaine." %}
+                                        </article>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </section>
                 {% endif %}
-            </p>
-        </section>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="card">
+            <div class="card-body">
+                <div class="empty-state">
+                    <i class="fas fa-calendar-days fs-1 mb-3 d-block text-muted"></i>
+                    <h2 class="h5">{% trans "Aucun planning disponible" %}</h2>
+                    <p class="mb-0">
+                        {% if student %}
+                            {% trans "Votre classe n'a pas encore de seances enregistrees." %}
+                        {% else %}
+                            {% trans "Aucune classe ne dispose encore d'un emploi du temps." %}
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
     {% endif %}
-</div>
 {% endblock %}

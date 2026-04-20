@@ -1,18 +1,17 @@
 from io import BytesIO
 import logging
-from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.db import transaction
 from django.db.models import Count, Q
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 from django.utils.timezone import localtime, now
-from django.utils.translation import get_language, activate, gettext as _
-from django.middleware.locale import LocaleMiddleware
+from django.utils.translation import gettext as _
 from reportlab.pdfgen import canvas
 
 from .forms import AbsenceJustificationForm, CustomAuthenticationForm, EtudiantForm, FiliereForm, SignUpForm, ImportExcelForm, PasswordChangeForm, UserProfileUpdateForm
@@ -30,6 +29,7 @@ WEEKDAY_ORDER = {
     'Saturday': 5,
     'Sunday': 6,
 }
+SUPPORTED_LANGUAGES = {'en', 'fr', 'ar'}
 
 # Importer openpyxl pour lire les fichiers Excel
 try:
@@ -48,29 +48,35 @@ except ImportError:
 
 # ======================== LANGUAGE DETECTION ========================
 
+def _normalize_language_code(language):
+    if not language:
+        return None
+    normalized = language.split('-')[0].lower()
+    return normalized if normalized in SUPPORTED_LANGUAGES else None
+
+
+def _get_preferred_language(request):
+    """Resolve the user's preferred language with a predictable fallback."""
+    language = _normalize_language_code(request.session.get('django_language'))
+    if language:
+        return language
+
+    browser_language = request.META.get('HTTP_ACCEPT_LANGUAGE', '')
+    if browser_language:
+        language = _normalize_language_code(browser_language.split(',')[0])
+        if language:
+            return language
+
+    return 'fr'
+
+
 def detect_language_and_redirect(request, target_url='login'):
     """
     Detect user's preferred language and redirect to language-prefixed URL.
     Checks in order: session, browser Accept-Language, default language
     """
-    # Get language from session (if user already selected)
-    language = request.session.get('django_language')
-    
-    # If not in session, get from browser Accept-Language header
-    if not language:
-        accept_language = request.META.get('HTTP_ACCEPT_LANGUAGE', '')
-        # Parse first preference
-        if accept_language:
-            lang = accept_language.split(',')[0].split('-')[0].lower()
-            # Check if it's a supported language
-            supported_langs = ['en', 'fr', 'ar']
-            if lang in supported_langs:
-                language = lang
-    
-    # Default to French if no language detected
-    if not language:
-        language = 'fr'
-    
+    language = _get_preferred_language(request)
+
     # If user is logged in and trying to access login, redirect to dashboard
     if target_url == 'login' and request.user.is_authenticated:
         return redirect(f'/{language}/dashboard/')
@@ -93,24 +99,26 @@ def root_language_redirect(request):
 
 def get_student_for_user(user):
     """Safely get student profile for a user."""
+    username = getattr(user, 'username', 'anonymous')
     try:
         if not user.is_authenticated:
             return None
         return getattr(user, 'etudiant_profile', None)
     except Exception as e:
-        logger.error(f"Error getting student profile for user {user.username}: {str(e)}")
+        logger.error(f"Error getting student profile for user {username}: {str(e)}")
         return None
 
 
 def redirect_after_login(user):
     """Redirect user to appropriate page after login."""
+    username = getattr(user, 'username', 'anonymous')
     try:
         student = get_student_for_user(user)
         if student:
             return redirect('student_dashboard')
         return redirect('dashboard')
     except Exception as e:
-        logger.error(f"Error redirecting user {user.username}: {str(e)}")
+        logger.error(f"Error redirecting user {username}: {str(e)}")
         return redirect('dashboard')
 
 
@@ -124,7 +132,7 @@ def validate_file_size(file, max_size_mb=5):
 def validate_excel_file(file):
     """Validate Excel file structure."""
     try:
-        if not file.name.endswith(('.xlsx', '.xls')):
+        if not file.name.lower().endswith(('.xlsx', '.xls')):
             return False, _("Invalid file format. Please upload .xlsx or .xls file")
         return True, _("File format is valid")
     except Exception as e:
@@ -176,6 +184,7 @@ def log_user_action(user, action, details=""):
 
 def build_schedule_section(filiere, schedules, current_day_name, current_time):
     """Build an ordered weekly calendar summary for a filiere."""
+    current_day_rank = WEEKDAY_ORDER.get(current_day_name, 99)
     ordered_schedules = sorted(
         schedules,
         key=lambda schedule: (
@@ -195,7 +204,8 @@ def build_schedule_section(filiere, schedules, current_day_name, current_time):
             today_session_count += 1
 
         if next_session is None:
-            is_future_day = WEEKDAY_ORDER.get(schedule.day_of_week, 99) > WEEKDAY_ORDER.get(current_day_name, 99)
+            schedule_day_rank = WEEKDAY_ORDER.get(schedule.day_of_week, 99)
+            is_future_day = schedule_day_rank > current_day_rank
             is_later_today = schedule.day_of_week == current_day_name and schedule.start_time >= current_time
             if is_future_day or is_later_today:
                 next_session = schedule
@@ -213,6 +223,8 @@ def build_schedule_section(filiere, schedules, current_day_name, current_time):
 
     first_session = ordered_schedules[0] if ordered_schedules else None
     last_session = ordered_schedules[-1] if ordered_schedules else None
+    if next_session is None and ordered_schedules:
+        next_session = first_session
 
     return {
         'filiere': filiere,
@@ -241,8 +253,9 @@ def login_view(request):
 
     form = CustomAuthenticationForm(request, data=request.POST or None)
     if request.method == 'POST' and form.is_valid():
-        login(request, form.get_user())
-        return redirect_after_login(form.get_user())
+        user = form.get_user()
+        login(request, user)
+        return redirect_after_login(user)
 
     return render(request, 'login.html', {'form': form})
 
@@ -263,8 +276,8 @@ def signup_view(request):
 
 @login_required
 def logout_view(request):
-    logout(request)
     log_user_action(request.user, "LOGOUT")
+    logout(request)
     return redirect('login')
 
 
@@ -342,13 +355,14 @@ def dashboard(request):
     if get_student_for_user(request.user):
         return redirect('student_dashboard')
 
+    today = now().date()
     filieres = Filiere.objects.annotate(
         student_count=Count('etudiants', distinct=True),
         present_count=Count(
             'etudiants__presences',
             distinct=True,
             filter=Q(
-                etudiants__presences__date=now().date(),
+                etudiants__presences__date=today,
                 etudiants__presences__present=True,
             ),
         ),
@@ -365,7 +379,7 @@ def dashboard(request):
     stats = {
         'filiere_count': filieres.count(),
         'student_count': Etudiant.objects.count(),
-        'attendance_count_today': Presence.objects.filter(date=now().date()).count(),
+        'attendance_count_today': Presence.objects.filter(date=today).count(),
         'pending_justifications_count': AbsenceJustification.objects.filter(status=AbsenceJustification.STATUS_PENDING).count(),
     }
     return render(
@@ -375,7 +389,7 @@ def dashboard(request):
             'filieres': filieres,
             'filiere_form': filiere_form,
             'stats': stats,
-            'today': now().date(),
+            'today': today,
         },
     )
 
@@ -447,12 +461,11 @@ def import_students_excel(request, filiere_id):
             messages.error(request, _("openpyxl n'est pas installe. Installez-le avec: pip install openpyxl"))
             return render(request, 'import_students.html', {'form': form, 'filiere': filiere})
         
-        excel_file = request.FILES['excel_file']
+        excel_file = form.cleaned_data['excel_file']
         
         try:
             # Charger le fichier Excel
-            from openpyxl import load_workbook
-            workbook = load_workbook(excel_file)
+            workbook = load_workbook(excel_file, read_only=True, data_only=True)
             worksheet = workbook.active
             
             # Extraire les donnees et creer les etudiants
@@ -545,9 +558,7 @@ def mark_attendance(request, filiere_id):
 
 
 def _update_student_totals(student):
-    student.total_presences = student.presences.filter(present=True).count()
-    student.total_absences = student.presences.filter(present=False).count()
-    student.save(update_fields=['total_presences', 'total_absences'])
+    student.refresh_attendance_totals()
 
 
 @login_required
@@ -555,20 +566,22 @@ def _update_student_totals(student):
 def save_attendance(request, filiere_id):
     filiere = get_object_or_404(Filiere, id=filiere_id)
     students = filiere.etudiants.all()
+    today = now().date()
 
-    for student in students:
-        is_present = f'present_{student.id}' in request.POST
-        presence, created = Presence.objects.get_or_create(
-            etudiant=student,
-            date=now().date(),
-            defaults={'present': is_present},
-        )
+    with transaction.atomic():
+        for student in students:
+            is_present = f'present_{student.id}' in request.POST
+            presence, created = Presence.objects.get_or_create(
+                etudiant=student,
+                date=today,
+                defaults={'present': is_present},
+            )
 
-        if not created and presence.present != is_present:
-            presence.present = is_present
-            presence.save(update_fields=['present'])
+            if not created and presence.present != is_present:
+                presence.present = is_present
+                presence.save(update_fields=['present'])
 
-        _update_student_totals(student)
+            _update_student_totals(student)
 
     messages.success(request, _("L'appel du jour a ete enregistre."))
     return generate_daily_pdf(filiere)
@@ -581,8 +594,9 @@ def monthly_report(request):
 
     filieres = Filiere.objects.all().order_by('nom')
     report = []
-    current_month = now().month
-    current_year = now().year
+    current_date = now().date()
+    current_month = current_date.month
+    current_year = current_date.year
 
     for filiere in filieres:
         data = []
@@ -608,19 +622,20 @@ def monthly_report(request):
             )
         report.append({'filiere': filiere, 'data': data})
 
-    return render(request, 'monthly_report.html', {'report': report, 'today': now().date()})
+    return render(request, 'monthly_report.html', {'report': report, 'today': current_date})
 
 
 @login_required
 def generate_monthly_pdf(request, filiere_id):
     filiere = get_object_or_404(Filiere, id=filiere_id)
+    current_date = now().date()
 
     buffer = BytesIO()
     pdf = canvas.Canvas(buffer)
     pdf.setFont("Helvetica-Bold", 14)
     pdf.drawString(180, 800, _("Rapport mensuel - {nom}").format(nom=filiere.nom))
     pdf.setFont("Helvetica", 12)
-    pdf.drawString(50, 775, _("Periode : {date}").format(date=now().strftime('%m/%Y')))
+    pdf.drawString(50, 775, _("Periode : {date}").format(date=current_date.strftime('%m/%Y')))
     pdf.drawString(50, 750, _("Etudiant"))
     pdf.drawString(300, 750, _("Presences"))
     pdf.drawString(430, 750, _("Absences"))
@@ -630,14 +645,14 @@ def generate_monthly_pdf(request, filiere_id):
         total_presences = Presence.objects.filter(
             etudiant=etudiant,
             present=True,
-            date__month=now().month,
-            date__year=now().year,
+            date__month=current_date.month,
+            date__year=current_date.year,
         ).count()
         total_absences = Presence.objects.filter(
             etudiant=etudiant,
             present=False,
-            date__month=now().month,
-            date__year=now().year,
+            date__month=current_date.month,
+            date__year=current_date.year,
         ).count()
 
         pdf.drawString(50, y, etudiant.nom)
@@ -657,18 +672,19 @@ def generate_monthly_pdf(request, filiere_id):
 
 
 def generate_daily_pdf(filiere):
+    current_date = now().date()
     buffer = BytesIO()
     pdf = canvas.Canvas(buffer)
     pdf.setFont("Helvetica-Bold", 14)
     pdf.drawString(180, 800, _("Appel du jour - {nom}").format(nom=filiere.nom))
     pdf.setFont("Helvetica", 12)
-    pdf.drawString(50, 775, _("Date : {date}").format(date=now().strftime('%d/%m/%Y')))
+    pdf.drawString(50, 775, _("Date : {date}").format(date=current_date.strftime('%d/%m/%Y')))
     pdf.drawString(50, 750, _("Etudiant"))
     pdf.drawString(320, 750, _("Presence"))
 
     y = 725
     for student in filiere.etudiants.all().order_by('nom'):
-        presence = Presence.objects.filter(etudiant=student, date=now().date()).first()
+        presence = Presence.objects.filter(etudiant=student, date=current_date).first()
         status = _("Present") if presence and presence.present else _("Absent")
         pdf.drawString(50, y, student.nom)
         pdf.drawString(320, y, status)
@@ -681,7 +697,7 @@ def generate_daily_pdf(filiere):
     pdf.save()
     buffer.seek(0)
     response = HttpResponse(buffer, content_type='application/pdf')
-    response['Content-Disposition'] = f'attachment; filename="appel_{filiere.nom}_{now().date()}.pdf"'
+    response['Content-Disposition'] = f'attachment; filename="appel_{filiere.nom}_{current_date}.pdf"'
     return response
 
 
@@ -692,8 +708,7 @@ def student_dashboard(request):
         return redirect('dashboard')
 
     presences = student.presences.select_related('justification').all()
-    absences = [presence for presence in presences if not presence.present]
-    justified_count = sum(1 for presence in absences if hasattr(presence, 'justification'))
+    justified_count = student.presences.filter(present=False, justification__isnull=False).count()
 
     # Get class schedule for the student's filiere
     schedule = ClassSchedule.objects.filter(filiere=student.filiere).order_by('day_of_week', 'start_time')
@@ -703,7 +718,7 @@ def student_dashboard(request):
         'presence_count': student.total_presences,
         'absence_count': student.total_absences,
         'justified_count': justified_count,
-        'pending_absence_count': student.total_absences - justified_count,
+        'pending_absence_count': max(student.total_absences - justified_count, 0),
     }
     return render(
         request,
@@ -765,16 +780,25 @@ def manage_justifications(request):
 
         justification = get_object_or_404(AbsenceJustification, id=justification_id)
 
-        if action == 'approve':
-            justification.status = AbsenceJustification.STATUS_APPROVED
-            messages.success(request, _("Justification de {nom} approuvee.").format(nom=justification.presence.etudiant.nom))
-        elif action == 'reject':
-            justification.status = AbsenceJustification.STATUS_REJECTED
-            messages.warning(request, _("Justification de {nom} rejetee.").format(nom=justification.presence.etudiant.nom))
-        else:
+        action_map = {
+            'approve': (
+                AbsenceJustification.STATUS_APPROVED,
+                messages.success,
+                _("Justification de {nom} approuvee."),
+            ),
+            'reject': (
+                AbsenceJustification.STATUS_REJECTED,
+                messages.warning,
+                _("Justification de {nom} rejetee."),
+            ),
+        }
+        if action not in action_map:
             messages.error(request, _("Action invalide."))
             return redirect('manage_justifications')
 
+        status, message_level, message_text = action_map[action]
+        justification.status = status
+        message_level(request, message_text.format(nom=justification.presence.etudiant.nom))
         justification.reviewed_at = now()
         justification.save()
         return redirect('manage_justifications')
@@ -805,10 +829,6 @@ def calendar_view(request):
     calendar_sections = []
     for filiere in filieres:
         schedules = list(filiere.schedules.all())
-        if student:
-            schedules = list(
-                ClassSchedule.objects.filter(filiere=filiere)
-            )
         calendar_sections.append(
             build_schedule_section(filiere, schedules, current_day_name, current_time)
         )
@@ -843,11 +863,11 @@ def absences_classes(request):
     if not student:
         return redirect('dashboard')
     presences = student.presences.select_related('justification').filter(present=False).order_by('-date')
-    justified_count = sum(1 for p in presences if hasattr(p, 'justification'))
+    justified_count = presences.filter(justification__isnull=False).count()
     stats = {
         'total': presences.count(),
         'justified': justified_count,
-        'unjustified': presences.count() - justified_count,
+        'unjustified': max(presences.count() - justified_count, 0),
     }
     return render(request, 'absences_classes.html', {'student': student, 'presences': presences, 'stats': stats})
 

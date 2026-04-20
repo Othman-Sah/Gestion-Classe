@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
@@ -147,32 +149,35 @@ class AbsenceJustificationForm(forms.ModelForm):
 
 class ImportExcelForm(forms.Form):
     """Form pour importer une liste d'etudiants depuis un fichier Excel"""
+
+    MAX_UPLOAD_SIZE = 5 * 1024 * 1024
+
     excel_file = forms.FileField(
         label=_("Fichier Excel"),
         help_text=_("Formats acceptes: .xlsx, .xls"),
         widget=forms.FileInput(attrs={'accept': '.xlsx,.xls'}),
     )
-    
+
     def clean_excel_file(self):
         file = self.cleaned_data.get('excel_file')
         if file:
-            # Verification de l'extension
-            if not (file.name.endswith('.xlsx') or file.name.endswith('.xls')):
+            extension = Path(file.name).suffix.lower()
+            if extension not in {'.xlsx', '.xls'}:
                 raise forms.ValidationError(_("Veuillez uploader un fichier Excel (.xlsx ou .xls)"))
-            # Verification de la taille (max 5MB)
-            if file.size > 5 * 1024 * 1024:
+            if file.size > self.MAX_UPLOAD_SIZE:
                 raise forms.ValidationError(_("Le fichier ne doit pas depasser 5 MB"))
         return file
 
 
 class PasswordChangeForm(forms.Form):
     """Form for changing user password"""
+
     current_password = forms.CharField(
         label=_("Mot de passe actuel"),
         strip=False,
         widget=forms.PasswordInput(attrs={
             'placeholder': _("Entrez votre mot de passe actuel"),
-            'class': 'form-control'
+            'class': 'form-control',
         }),
     )
     new_password1 = forms.CharField(
@@ -180,7 +185,7 @@ class PasswordChangeForm(forms.Form):
         strip=False,
         widget=forms.PasswordInput(attrs={
             'placeholder': _("Entrez votre nouveau mot de passe"),
-            'class': 'form-control'
+            'class': 'form-control',
         }),
     )
     new_password2 = forms.CharField(
@@ -188,7 +193,7 @@ class PasswordChangeForm(forms.Form):
         strip=False,
         widget=forms.PasswordInput(attrs={
             'placeholder': _("Confirmez votre nouveau mot de passe"),
-            'class': 'form-control'
+            'class': 'form-control',
         }),
     )
 
@@ -218,13 +223,14 @@ class PasswordChangeForm(forms.Form):
 
 class UserProfileUpdateForm(forms.ModelForm):
     """Form for updating user profile information"""
+
     first_name = forms.CharField(
         label=_("Prénom"),
         max_length=30,
         required=False,
         widget=forms.TextInput(attrs={
             'placeholder': _("Votre prénom"),
-            'class': 'form-control'
+            'class': 'form-control',
         }),
     )
     last_name = forms.CharField(
@@ -233,7 +239,7 @@ class UserProfileUpdateForm(forms.ModelForm):
         required=False,
         widget=forms.TextInput(attrs={
             'placeholder': _("Votre nom de famille"),
-            'class': 'form-control'
+            'class': 'form-control',
         }),
     )
     email = forms.EmailField(
@@ -241,7 +247,7 @@ class UserProfileUpdateForm(forms.ModelForm):
         required=False,
         widget=forms.EmailInput(attrs={
             'placeholder': _("Votre adresse email"),
-            'class': 'form-control'
+            'class': 'form-control',
         }),
     )
 

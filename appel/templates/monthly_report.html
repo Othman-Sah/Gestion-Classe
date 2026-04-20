@@ -1,24 +1,29 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block title %}Rapport mensuel{% endblock %}
+{% block title %}{% trans "Rapport mensuel" %}{% endblock %}
 
 {% block content %}
     <section class="hero-section mb-4">
-        <div class="row align-items-stretch">
+        <div class="row align-items-center g-4">
             <div class="col-lg-8">
-                <span class="eyebrow d-block">Archive mensuelle</span>
-                <span class="pill">{{ today|date:"m/Y" }}</span>
-                <h1 class="mt-2">Rapport mensuel global</h1>
-                <p>Visualisez les présences et absences de toutes les classes dans une présentation plus lisible.</p>
+                <span class="eyebrow"><i class="fas fa-chart-line"></i> {% trans "Rapports" %}</span>
+                <h1>{% trans "Rapport mensuel global" %}</h1>
+                <p>{% trans "Consultez les presences et absences de toutes les classes pour le mois en cours." %}</p>
+                <div class="d-flex flex-wrap gap-2 mt-3">
+                    <span class="pill"><i class="fas fa-calendar"></i> {{ today|date:"m/Y" }}</span>
+                </div>
             </div>
-            <aside class="col-lg-4 spotlight d-flex flex-column justify-content-center">
-                <span class="eyebrow">Ce que vous pouvez faire</span>
-                <ul class="mb-0">
-                    <li>Comparer les classes du mois</li>
-                    <li>Voir les présences par étudiant</li>
-                    <li>Exporter chaque classe en PDF</li>
-                </ul>
-            </aside>
+            <div class="col-lg-4">
+                <div class="spotlight h-100">
+                    <span class="eyebrow"><i class="fas fa-file-pdf"></i> {% trans "Export" %}</span>
+                    <ul class="mb-0">
+                        <li>{% trans "Comparer les classes" %}</li>
+                        <li>{% trans "Voir les totaux par etudiant" %}</li>
+                        <li>{% trans "Exporter une classe en PDF" %}</li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -27,30 +32,33 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap mb-3">
                     <div>
-                        <h2>{{ filiere.filiere.nom }}</h2>
-                        <p class="text-muted">{{ filiere.filiere.description|default:"Aucune description." }}</p>
+                        <h2 class="h4 mb-1">{{ filiere.filiere.nom }}</h2>
+                        <p class="text-muted mb-0">{{ filiere.filiere.description|default:"Aucune description." }}</p>
                     </div>
-                    <a class="btn btn-outline-secondary" href="{% url 'generate_monthly_report' filiere.filiere.id %}">PDF</a>
+                    <a class="btn btn-outline-secondary" href="{% url 'generate_monthly_report' filiere.filiere.id %}">
+                        <i class="fas fa-file-pdf me-1"></i>{% trans "PDF" %}
+                    </a>
                 </div>
+
                 <div class="table-responsive">
-                    <table class="table mb-0">
+                    <table class="table align-middle">
                         <thead>
                             <tr>
-                                <th>Étudiant</th>
-                                <th>Présences</th>
-                                <th>Absences</th>
+                                <th>{% trans "Etudiant" %}</th>
+                                <th>{% trans "Presences" %}</th>
+                                <th>{% trans "Absences" %}</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for data in filiere.data %}
                                 <tr>
-                                    <td>{{ data.etudiant.nom }}</td>
+                                    <td><strong>{{ data.etudiant.nom }}</strong></td>
                                     <td>{{ data.total_presences }}</td>
                                     <td>{{ data.total_absences }}</td>
                                 </tr>
                             {% empty %}
                                 <tr>
-                                    <td colspan="3" class="text-center text-muted">Aucun étudiant dans cette classe.</td>
+                                    <td colspan="3" class="text-center text-muted">{% trans "Aucun etudiant dans cette classe." %}</td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -61,7 +69,10 @@
     {% empty %}
         <div class="card">
             <div class="card-body">
-                <div class="empty-state">Aucune classe disponible pour le rapport.</div>
+                <div class="empty-state">
+                    <i class="fas fa-folder-open fs-1 mb-3 d-block text-muted"></i>
+                    <p class="mb-0">{% trans "Aucune classe disponible pour le rapport." %}</p>
+                </div>
             </div>
         </div>
     {% endfor %}
